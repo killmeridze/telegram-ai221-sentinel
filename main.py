@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import telegram
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, JobQueue
+job_queue = JobQueue()
 import datetime
 
 def start(update, context):
@@ -136,7 +137,7 @@ if __name__ == '__main__':
             }
         ]
     }
-    updater = Updater(bot_token)
+    updater = Updater(bot_token, job_queue=job_queue)
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('help', help))
