@@ -136,7 +136,7 @@ if __name__ == '__main__':
             }
         ]
     }
-    updater = Updater(token=bot_token, request_kwargs={'read_timeout': 6, 'connect_timeout': 7})
+    updater = Updater(bot_token, request_kwargs={'read_timeout': 6, 'connect_timeout': 7})
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('help', help))
