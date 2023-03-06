@@ -136,7 +136,7 @@ if __name__ == '__main__':
             }
         ]
     }
-    updater = Updater(bot_token, use_context=True)
+    updater = Updater(bot_token)
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('help', help))
