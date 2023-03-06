@@ -1,37 +1,39 @@
 # -*- coding: utf-8 -*-
-import telegram
-from telegram.ext import Updater, CommandHandler
+import telebot
 import datetime
 
-def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Привет, сливка! Введи /schedule для того, чтобы получить расписание на сегодня.")
+bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
 
-def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Список доступных команд:\n/schedule")
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(chat_id=message.chat.id, text="Привет, сливка! Введи /schedule для того, чтобы получить расписание на сегодня.")
 
-def schedule(update, context):
+@bot.message_handler(commands=['help'])
+def help(message):
+    bot.send_message(chat_id=message.chat.id, text="Список доступных команд:\n/schedule")
+
+@bot.message_handler(commands=['schedule'])
+def schedule(message):
     now = datetime.datetime.now()
     day = now.strftime("%A").lower()
 
     try:
         schedule = SCHEDULE[day]
     except KeyError:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Ты бессмертн(-ый/-ая) что ли? Иди проспись")
+        bot.send_message(chat_id=message.chat.id, text="Ты бессмертн(-ый/-ая) что ли? Иди проспись")
         return
 
-    message = "Расписание на сегодня:\n\n"
+    message_text = "Расписание на сегодня:\n\n"
 
     for item in schedule:
-        message += "{}{}:\n".format(item['time'], item['name'])
+        message_text += "{}{}:\n".format(item['time'], item['name'])
 
         for link in item['links']:
-            message += "{}\n".format(link)
+            message_text += "{}\n".format(link)
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=message)
+    bot.send_message(chat_id=message.chat.id, text=message_text)
 
 if __name__ == '__main__':
-    bot_token = '5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA'
-
     SCHEDULE = {
         'monday': [
             {
@@ -136,11 +138,4 @@ if __name__ == '__main__':
             }
         ]
     }
-    updater = Updater(token=bot_token, request_kwargs={'read_timeout': 6, 'connect_timeout': 7})
-    dispatcher = updater.dispatcher
-    dispatcher.add_handler(CommandHandler('start', start))
-    dispatcher.add_handler(CommandHandler('help', help))
-    dispatcher.add_handler(CommandHandler('schedule', schedule))
-
-    updater.start_polling()
-    updater.idle()
+bot.polling(none_stop=True)
