@@ -22,10 +22,10 @@ def schedule(update, context):
     message = "Расписание на сегодня:\n\n"
 
     for item in schedule:
-        message += f"{item['time']}{item['name']}:\n"
+        message += "{}{}:\n".format(item['time'], item['name'])
 
         for link in item['links']:
-            message += f"{link}\n"
+            message += "{}\n".format(link)
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=message)
 
