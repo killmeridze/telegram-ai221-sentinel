@@ -18,16 +18,18 @@
     ],
     "tuesday": [
         {
+            "week_parity": false,
             "time": "9:50-11:25\n",
-            "name": "Алгоритмизация н/п (Лаб)",
+            "name": "Алгоритмизация непарна (Лаб)",
             "links": [
                 "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
                 "Пароль: 893295\n"
             ]
         },
         {
+            "week_parity": true,
             "time": "9:50-11:25\n",
-            "name": "Алгоритмизация парная (Лекция)",
+            "name": "Алгоритмизация парна (Практика)",
             "links": [
             "https://us02web.zoom.us/j/89424759693?pwd=eDFjMnJSL1lpVDFEdjVDSWhnRTdLZz099\n",
             "Пароль: 846495\n"

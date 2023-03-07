@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 import telebot
-from telebot import types
 import datetime
 import json
+import settings
+
+
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
 
@@ -14,28 +15,38 @@ def start(message):
 
 @bot.message_handler(commands=['Расписание'])
 def schedule(message):
-    now = datetime.datetime.now()
-    day = now.strftime('%A').lower()
+    today = datetime.date.today()
 
-    with open('day_names_ru.json', 'r', encoding='utf-8') as f:
-        day_names = json.load(f)
-
-    day_ru = day_names.get(day, day)
+    #Проверка на чётность/нечётность False - нечётная, True - чётная
+    current_week_number = today.isocalendar()[1]
+    week_parity = False
+    if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
+        week_parity = False
+    else:
+        week_parity = True
+    
+    day_name_en = today.strftime('%A').lower()
+    day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
 
     with open('schedule.json', 'r', encoding='utf-8') as f:
-        schedule = json.load(f).get(day)
+        schedule = json.load(f).get(day_name_en)
 
     if not schedule:
-        bot.send_message(chat_id=message.chat.id, text='Ты бессмертн(-ый/-ая) что ли? Иди проспись')
+        bot.send_message(chat_id=message.chat.id, text="Ты бессмертн(-ый/-ая) что ли? Иди проспись")
         return
 
-    message_text = f"Расписание на {day_ru.capitalize()}:\n\n"
+    message_text = f"Расписание на {day_name_ru}:\n\n"
 
     for item in schedule:
-        message_text += '{}{}:\n'.format(item['time'], item['name'])
+        if item.get('week_parity') is None:
+            message_text += f"{item['time']}{item['name']}:\n"
+            for link in item["links"]:
+                message_text += f"{link}\n"
 
-        for link in item['links']:
-            message_text += '{}\n'.format(link)
+        elif item.get('week_parity') is week_parity:
+            message_text += f"{item['time']}{item['name']}:\n"
+            for link in item["links"]:
+                message_text += f"{link}\n"
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
 
