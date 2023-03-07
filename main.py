@@ -3,8 +3,14 @@ import datetime
 import json
 import settings
 import sqlite3
-import threading
-import queue
+from threading import Thread
+import schedule as sc
+from time import sleep
+
+def schedule_checker():
+    while True:
+        sc.run_pending()
+        sleep(1)
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
 
@@ -16,7 +22,7 @@ def start(message):
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(button)
     keyboard.row(button_subscribe, button_unsubscribe)
-    bot.send_message(chat_id=message.chat.id, text='Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
+    bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
 
 @bot.message_handler(commands=['Расписание'])
 def schedule(message):
@@ -97,4 +103,7 @@ def unsubscribe(message):
 
     conn.close()
 if __name__ == '__main__':
+    sc.every(3).seconds.do(bot.send_message, chat_id=700766922, text="Приветики")
+    Thread(target=schedule_checker).start()
+
     bot.polling(none_stop=True)
