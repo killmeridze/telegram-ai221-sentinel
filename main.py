@@ -2,15 +2,20 @@ import telebot
 import datetime
 import json
 import settings
-
-
+import sqlite3
+import threading
+import queue
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
 
 @bot.message_handler(commands=['start'])
 def start(message):
     button = telebot.types.KeyboardButton('/Расписание')
-    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True).add(button)
+    button_subscribe = telebot.types.KeyboardButton('/Подписаться')
+    button_unsubscribe = telebot.types.KeyboardButton('/Отписаться')
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.row(button)
+    keyboard.row(button_subscribe, button_unsubscribe)
     bot.send_message(chat_id=message.chat.id, text='Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
 
 @bot.message_handler(commands=['Расписание'])
@@ -50,5 +55,46 @@ def schedule(message):
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
 
-if __name__ == '__main__':   
+@bot.message_handler(commands=['Подписаться'])
+def subscribe(message):
+    user_id = message.chat.id
+    subscription_time = datetime.datetime.now()
+    
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
+    subscribe_user = cursor.fetchone()
+
+    if subscribe_user:
+        conn.commit()
+        bot.reply_to(message, "Вы уже подписаны на рассылку!")
+    else:
+        cursor.execute('INSERT INTO subscriptions (user_id, subscription_time) VALUES (?, ?)', (user_id, subscription_time))
+        conn.commit()
+        bot.reply_to(message, "Вы успешно подписались на рассылку!")
+
+    conn.close()
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def unsubscribe(message):
+    user_id = message.chat.id
+    subscription_time = datetime.datetime.now()
+    
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
+    unsubscribe_user = cursor.fetchone()
+
+    if unsubscribe_user:
+        cursor.execute('DELETE FROM subscriptions WHERE user_id = ?', (user_id,))
+        conn.commit()
+        bot.reply_to(message, "Вы успешно отписались от рассылки!")
+    else:
+        conn.commit()
+        bot.reply_to(message, "Вы не подписаны на рассылку!")
+
+    conn.close()
+if __name__ == '__main__':
     bot.polling(none_stop=True)
