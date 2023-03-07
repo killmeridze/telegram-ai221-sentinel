@@ -1,0 +1,98 @@
+{
+    "monday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Дискретная математика (Лекция)",
+            "links": [
+                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Операционные системы (Лекция)",
+            "links": [
+                "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
+                "\n\nТерпения тебе!"
+            ]
+        }
+    ],
+    "tuesday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Алгоритмизация н/п (Лаб)",
+            "links": [
+                "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
+                "Пароль:893295\n"
+            ]
+        },
+        {
+            "time": "9:50-11:25\n",
+            "name": "Алгоритмизн/п (Лекция)",
+            "links": [
+            "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
+            "Пароль:893295\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Физика (Лекция)",
+            "links": [
+            "https://zoom.us/j/92586135973?pwd=MmR1Rk9pWnJyNTR6ckdqQ2ZwY3ZBdz09"
+            ]
+        }
+    ],
+    "wednesday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Дискретная математика (Практика)",
+            "links": [
+            "https://zoom.us/j/94578371583?pwd=M2QvT3hNZWxTc0NXNXkwVFNZM1pldz09",
+            "Пароль: 083912\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Операционные системы (Практика)",
+            "links": [
+            "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
+            "\n\nТерпения тебе!"
+            ]
+        }
+    ],
+    "thursday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Физика (Практика)",
+            "links": [
+            "https://zoom.us/j/92586135973?pwd=MmR1Rk9pWnJyNTR6ckdqQ2ZwY3ZBdz09"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Алгоритмизация н/п (Лаб)",
+            "links": [
+            "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
+            "Пароль:893295\n"
+            ]
+        }
+    ],
+    "friday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Физическая культура (Лекция)",
+            "links": [
+            "https://zoom.us/j/123456789?pwd=QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Дискретная математика (Лаб)",
+            "links": [
+            "https://zoom.us/j/94578371583?pwd=M2QvT3hNZWxTc0NXNXkwVFNZM1pldz09",
+            "Пароль: 083912\n"
+            ]
+        }
+    ],
+    "saturday": [],
+    "sunday": []
+ }
