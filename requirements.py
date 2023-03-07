@@ -8,7 +8,7 @@ FIRST_WEEK_NUMBER = 10
 today = datetime.date.today()
 current_week_number = today.isocalendar()[1]
 
-#Проверка на чётность/нечётность
+#Проверка на чётность/нечётность False - нечётная, True - чётная
 week_parity = False
 if (current_week_number - FIRST_WEEK_NUMBER) % 2 == 0:
     week_parity = False
