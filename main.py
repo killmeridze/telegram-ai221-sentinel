@@ -7,12 +7,27 @@ from threading import Thread
 import schedule as sc
 from time import sleep
 
+bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
+
+def send_schedule():
+    message_text = "Приветики"
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id FROM subscriptions')
+    subscribers = cursor.fetchall()
+
+    for subscriber in subscribers:
+        bot.send_message(chat_id=subscriber[0], text=message_text)
+
+    conn.commit()
+    conn.close()
+
 def schedule_checker():
     while True:
         sc.run_pending()
         sleep(1)
-
-bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
+        
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -69,6 +84,11 @@ def subscribe(message):
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions 
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                   user_id INTEGER NOT NULL, 
+                   subscription_time TEXT NOT NULL)''')
+
     cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
     subscribe_user = cursor.fetchone()
 
@@ -102,8 +122,9 @@ def unsubscribe(message):
         bot.reply_to(message, "Вы не подписаны на рассылку!")
 
     conn.close()
-if __name__ == '__main__':
-    sc.every(3).seconds.do(bot.send_message, chat_id=700766922, text="Приветики")
-    Thread(target=schedule_checker).start()
 
+if __name__ == '__main__':
+    sc.every(3).seconds.do(send_schedule)
+    # sc.every().day.at("07:00").do(send_schedule)
+    Thread(target=schedule_checker).start()
     bot.polling(none_stop=True)
