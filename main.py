@@ -8,7 +8,7 @@ import schedule as sc
 import settings
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
-
+# 123
 def schedule_checker():
     while True:
         sc.run_pending()
