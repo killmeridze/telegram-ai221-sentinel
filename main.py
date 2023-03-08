@@ -124,7 +124,7 @@ def unsubscribe(message):
     conn.close()
 
 if __name__ == '__main__':
-    sc.every(3).seconds.do(send_schedule)
-    # sc.every().day.at("07:00").do(send_schedule)
+    # sc.every(3).seconds.do(send_schedule)
+    sc.every().day.at("07:00").do(send_schedule)
     Thread(target=schedule_checker).start()
     bot.polling(none_stop=True)
