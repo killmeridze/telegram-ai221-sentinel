@@ -1,46 +1,21 @@
 import telebot
 import datetime
+from time import sleep
 import json
-import settings
 import sqlite3
 from threading import Thread
 import schedule as sc
-from time import sleep
+import settings
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
-
-def send_schedule():
-    message_text = "Приветики"
-    conn = sqlite3.connect('subscriptions.db')
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT user_id FROM subscriptions')
-    subscribers = cursor.fetchall()
-
-    for subscriber in subscribers:
-        bot.send_message(chat_id=subscriber[0], text=message_text)
-
-    conn.commit()
-    conn.close()
 
 def schedule_checker():
     while True:
         sc.run_pending()
         sleep(1)
-        
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    button = telebot.types.KeyboardButton('/Расписание')
-    button_subscribe = telebot.types.KeyboardButton('/Подписаться')
-    button_unsubscribe = telebot.types.KeyboardButton('/Отписаться')
-    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.row(button)
-    keyboard.row(button_subscribe, button_unsubscribe)
-    bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
-
-@bot.message_handler(commands=['Расписание'])
-def schedule(message):
+def schedule_text() -> str:
+    """Функция для составления сообщения с расписанием"""
     today = datetime.date.today()
 
     #Проверка на чётность/нечётность False - нечётная, True - чётная
@@ -58,8 +33,8 @@ def schedule(message):
         schedule = json.load(f).get(day_name_en)
 
     if not schedule:
-        bot.send_message(chat_id=message.chat.id, text="Ты бессмертн(-ый/-ая) что ли? Иди проспись")
-        return
+        message_text = "Ты бессмертн(-ый/-ая) что ли? Иди проспись"
+        return message_text
 
     message_text = f"Расписание на {day_name_ru}:\n\n"
 
@@ -74,6 +49,36 @@ def schedule(message):
             for link in item["links"]:
                 message_text += f"{link}\n"
 
+    return message_text
+
+def send_schedule(message_text: str):
+    """Функция для авторассылки сообщений"""
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id FROM subscriptions')
+    subscribers = cursor.fetchall()
+
+    for subscriber in subscribers:
+        bot.send_message(chat_id=subscriber[0], text=message_text)
+
+    conn.commit()
+    conn.close()
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    button = telebot.types.KeyboardButton('/Расписание')
+    button_subscribe = telebot.types.KeyboardButton('/Подписаться')
+    button_unsubscribe = telebot.types.KeyboardButton('/Отписаться')
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.row(button)
+    keyboard.row(button_subscribe, button_unsubscribe)
+    bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
+
+@bot.message_handler(commands=['Расписание'])
+def schedule(message):
+    message_text = schedule_text()
+
     bot.send_message(chat_id=message.chat.id, text=message_text)
 
 @bot.message_handler(commands=['Подписаться'])
@@ -85,9 +90,9 @@ def subscribe(message):
     cursor = conn.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions 
-                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                   user_id INTEGER NOT NULL, 
-                   subscription_time TEXT NOT NULL)''')
+                (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                user_id INTEGER NOT NULL, 
+                subscription_time TEXT NOT NULL)''')
 
     cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
     subscribe_user = cursor.fetchone()
@@ -124,7 +129,8 @@ def unsubscribe(message):
     conn.close()
 
 if __name__ == '__main__':
-    # sc.every(3).seconds.do(send_schedule)
-    sc.every().day.at("07:00").do(send_schedule)
+    sc.every().day.at("07:00").do(send_schedule, schedule_text())
+    # sc.every(3).seconds.do(send_schedule, schedule_text())
     Thread(target=schedule_checker).start()
+
     bot.polling(none_stop=True)
