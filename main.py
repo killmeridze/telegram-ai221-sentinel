@@ -7,8 +7,9 @@ from threading import Thread
 import schedule as sc
 import settings
 
-bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
-# 123
+# bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
+bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts')
+
 def schedule_checker():
     while True:
         sc.run_pending()
@@ -25,7 +26,7 @@ def schedule_text() -> str:
         week_parity = False
     else:
         week_parity = True
-    
+
     day_name_en = today.strftime('%A').lower()
     day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
 
@@ -75,23 +76,23 @@ def start(message):
     keyboard.row(button_subscribe, button_unsubscribe)
     bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
 
-@bot.message_handler(commands=['Расписание'])
+@bot.message_handler(func=lambda message: message.text == 'Расписание', content_types=['text'])
 def schedule(message):
     message_text = schedule_text()
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
 
-@bot.message_handler(commands=['Подписаться'])
+@bot.message_handler(func=lambda message: message.text == 'Подписаться', content_types=['text'])
 def subscribe(message):
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
-    
+
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions 
-                (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                user_id INTEGER NOT NULL, 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
+                (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
                 subscription_time TEXT NOT NULL)''')
 
     cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
@@ -107,11 +108,11 @@ def subscribe(message):
 
     conn.close()
 
-@bot.message_handler(func=lambda message: True, content_types=['text'])
+@bot.message_handler(func=lambda message: message.text == 'Отписаться', content_types=['text'])
 def unsubscribe(message):
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
-    
+
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
@@ -131,6 +132,11 @@ def unsubscribe(message):
 if __name__ == '__main__':
     sc.every().day.at("07:00").do(send_schedule, schedule_text())
     # sc.every(3).seconds.do(send_schedule, schedule_text())
-    Thread(target=schedule_checker).start()
+    
+    thread = Thread(target=schedule_checker, daemon=True)
+    thread.start()
 
     bot.polling(none_stop=True)
+
+    while thread.is_alive:
+        thread.join(1)
