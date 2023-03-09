@@ -3,9 +3,9 @@ FIRST_WEEK_NUMBER = 10
 weekday_name_ru_dict = {
     "monday": "Понедельник",
     "tuesday": "Вторник",
-    "wednesday": "Среда",
+    "wednesday": "Среду",
     "thursday": "Четверг",
-    "friday": "Пятница",
+    "friday": "Пятницу",
     "saturday": "Суббота",
     "sunday": "Воскресенье"
 }
