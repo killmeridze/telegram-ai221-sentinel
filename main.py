@@ -11,7 +11,7 @@ from loguru import logger
 
 
 logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", level="DEBUG", rotation="10 MB", compression="zip")
-#123
+
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
 # bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
 
@@ -151,8 +151,13 @@ def unsubscribe(message):
     conn.close()
 
 if __name__ == '__main__':
-    sc.every().day.at("07:00").do(send_schedule)
-    
+    # sc.every().day.at("07:00").do(send_schedule)
+    sc.every().monday.at("07:00").do(send_schedule)
+    sc.every().tuesday.at("07:00").do(send_schedule)
+    sc.every().wednesday.at("07:00").do(send_schedule)
+    sc.every().thursday.at("07:00").do(send_schedule)
+    sc.every().friday.at("07:00").do(send_schedule)
+
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
 
