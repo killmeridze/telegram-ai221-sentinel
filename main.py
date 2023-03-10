@@ -7,8 +7,8 @@ from threading import Thread
 import schedule as sc
 import settings
 
-# bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA')
-bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts')
+bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
+# bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
 
 def schedule_checker():
     while True:
@@ -68,9 +68,9 @@ def send_schedule(message_text: str):
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    button = telebot.types.KeyboardButton('/Расписание')
-    button_subscribe = telebot.types.KeyboardButton('/Подписаться')
-    button_unsubscribe = telebot.types.KeyboardButton('/Отписаться')
+    button = telebot.types.KeyboardButton('Расписание')
+    button_subscribe = telebot.types.KeyboardButton('Подписаться')
+    button_unsubscribe = telebot.types.KeyboardButton('Отписаться')
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(button)
     keyboard.row(button_subscribe, button_unsubscribe)
@@ -131,7 +131,6 @@ def unsubscribe(message):
 
 if __name__ == '__main__':
     sc.every().day.at("07:00").do(send_schedule, schedule_text())
-    # sc.every(3).seconds.do(send_schedule, schedule_text())
     
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
