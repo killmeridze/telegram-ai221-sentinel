@@ -168,7 +168,6 @@ if __name__ == '__main__':
     sc.every().wednesday.at("07:00").do(send_schedule)
     sc.every().thursday.at("07:00").do(send_schedule)
     sc.every().friday.at("07:00").do(send_schedule)
-    
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
