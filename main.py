@@ -12,8 +12,8 @@ from loguru import logger
 
 logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", level="DEBUG", rotation="10 MB", compression="zip")
 
-bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
-# bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
+# bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
+bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
 
 def schedule_checker():
     while True:
@@ -99,16 +99,25 @@ def schedule(message):
 def subscribe(message):
     logger.info(f"User {message.from_user.id} tried to subscribe")
 
+    username = message.from_user.username
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
+    group_number = 1 # когда будет реализация запроса на ввод группы - доделаем
+    subscribed = 1 # подумать надо xd
+    language = 'ukr' # same shit
 
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
                 user_id INTEGER NOT NULL,
-                subscription_time TEXT NOT NULL)''')
+                subscription_time TEXT NOT NULL,
+                group_number INTEGER NOT NULL CHECK (group_number IN (1, 2)),
+                subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
+                language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')))''')
+
 
     cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
     subscribe_user = cursor.fetchone()
@@ -119,7 +128,8 @@ def subscribe(message):
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already subscribed")
 
     else:
-        cursor.execute('INSERT INTO subscriptions (user_id, subscription_time) VALUES (?, ?)', (user_id, subscription_time))
+        cursor.execute('INSERT INTO subscriptions (username, user_id, group_number, subscribed, language, subscription_time) VALUES (?, ?, ?, ?, ?, ?)',
+                (username, user_id, group_number, subscribed, language, subscription_time))
         conn.commit()
         bot.reply_to(message, "Вы успешно подписались на рассылку!")
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully subscribed")
@@ -150,6 +160,7 @@ def unsubscribe(message):
 
     conn.close()
 
+
 if __name__ == '__main__':
     # sc.every().day.at("07:00").do(send_schedule)
     sc.every().monday.at("07:00").do(send_schedule)
@@ -157,11 +168,12 @@ if __name__ == '__main__':
     sc.every().wednesday.at("07:00").do(send_schedule)
     sc.every().thursday.at("07:00").do(send_schedule)
     sc.every().friday.at("07:00").do(send_schedule)
+    
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
 
     bot.polling(none_stop=True)
 
-    while thread.is_alive:
+    while thread.is_alive:                              
         thread.join(1)
