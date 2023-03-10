@@ -102,8 +102,8 @@ def subscribe(message):
     username = message.from_user.username
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
-    group_number = 1 # когда будет реализация запроса на ввод группы - доделаем
-    subscribed = 1 # подумать надо xd
+    group_number = 1 # kogda budet realizaciya zaprosa na vvod grupi - pomenyaem
+    subscribed = 0 # vrode norm rabotaet
     language = 'ukr' # same shit
 
     conn = sqlite3.connect('subscriptions.db')
@@ -129,7 +129,7 @@ def subscribe(message):
 
     else:
         cursor.execute('INSERT INTO subscriptions (username, user_id, group_number, subscribed, language, subscription_time) VALUES (?, ?, ?, ?, ?, ?)',
-                (username, user_id, group_number, subscribed, language, subscription_time))
+                (username, user_id, group_number, 1, language, subscription_time))
         conn.commit()
         bot.reply_to(message, "Вы успешно подписались на рассылку!")
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully subscribed")
