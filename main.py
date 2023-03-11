@@ -12,8 +12,8 @@ from loguru import logger
 
 logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", level="DEBUG", rotation="10 MB", compression="zip")
 
-# bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
-bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
+bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
+# bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
 
 def schedule_checker():
     while True:
@@ -59,7 +59,7 @@ def schedule_text(today: datetime.date) -> str:
 def send_schedule():
     """Функция для авторассылки сообщений"""
     today = datetime.date.today()
-    
+
     message_text = schedule_text(today)
 
     conn = sqlite3.connect('subscriptions.db')
@@ -111,7 +111,7 @@ def subscribe(message):
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL,
+                username TEXT,
                 user_id INTEGER NOT NULL,
                 subscription_time TEXT NOT NULL,
                 group_number INTEGER NOT NULL CHECK (group_number IN (1, 2)),
@@ -174,5 +174,5 @@ if __name__ == '__main__':
 
     bot.polling(none_stop=True)
 
-    while thread.is_alive:                              
+    while thread.is_alive:
         thread.join(1)
