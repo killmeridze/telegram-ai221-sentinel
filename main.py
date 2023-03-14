@@ -59,7 +59,7 @@ def schedule_text(today: datetime.date) -> str:
 def send_schedule():
     """Функция для авторассылки сообщений"""
     today = datetime.date.today()
-
+    
     message_text = schedule_text(today)
 
     conn = sqlite3.connect('subscriptions.db')
@@ -111,7 +111,7 @@ def subscribe(message):
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT,
+                username TEXT NOT NULL,
                 user_id INTEGER NOT NULL,
                 subscription_time TEXT NOT NULL,
                 group_number INTEGER NOT NULL CHECK (group_number IN (1, 2)),
@@ -174,5 +174,5 @@ if __name__ == '__main__':
 
     bot.polling(none_stop=True)
 
-    while thread.is_alive:
+    while thread.is_alive:                              
         thread.join(1)
