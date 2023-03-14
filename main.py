@@ -7,13 +7,16 @@ from threading import Thread
 import schedule as sc
 import settings
 from loguru import logger
-
-
+from dotenv import load_dotenv
+import os
 
 logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", level="DEBUG", rotation="10 MB", compression="zip")
 
-bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
-# bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
+load_dotenv()
+
+TOKEN = os.getenv('TOKEN')
+
+bot = telebot.TeleBot(TOKEN)
 
 def schedule_checker():
     while True:
