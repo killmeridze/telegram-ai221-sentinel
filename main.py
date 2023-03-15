@@ -114,7 +114,7 @@ def subscribe(message):
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL,
+                username TEXT,
                 user_id INTEGER NOT NULL,
                 subscription_time TEXT NOT NULL,
                 group_number INTEGER NOT NULL CHECK (group_number IN (1, 2)),
