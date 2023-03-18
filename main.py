@@ -59,6 +59,12 @@ def schedule_text(today: datetime.date) -> str:
 
     return message_text
 
+def schedule_tomorrow_text(today: datetime.date) -> str:
+    """Функция для составления сообщения с расписанием на завтра"""
+
+    tomorrow = today + datetime.timedelta(days=1)
+    return schedule_text(tomorrow)
+
 def send_schedule():
     """Функция для авторассылки сообщений"""
     today = datetime.date.today()
@@ -78,13 +84,15 @@ def send_schedule():
     conn.commit()
     conn.close()
 
+
 @bot.message_handler(commands=['start'])
 def start(message):
     button = telebot.types.KeyboardButton('Расписание')
+    button_tomorrow = telebot.types.KeyboardButton('Расписание на завтра')  # новая кнопка
     button_subscribe = telebot.types.KeyboardButton('Подписаться')
     button_unsubscribe = telebot.types.KeyboardButton('Отписаться')
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.row(button)
+    keyboard.row(button, button_tomorrow)  # добавление новой кнопки в клавиатуру
     keyboard.row(button_subscribe, button_unsubscribe)
     bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
     logger.info(f"New user - {message.from_user.username}")
@@ -97,6 +105,15 @@ def schedule(message):
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
     logger.info(f"Sent schedule to {message.from_user.username}(user_id - {message.from_user.id}) via command /Расписание")
+
+@bot.message_handler(func=lambda message: message.text == 'Расписание на завтра', content_types=['text'])
+def schedule_tomorrow(message):
+    today = datetime.date.today()
+
+    message_text = schedule_tomorrow_text(today)
+
+    bot.send_message(chat_id=message.chat.id, text=message_text)
+    logger.info(f"Sent schedule to {message.from_user.username}(user_id - {message.from_user.id}) via command /Расписание на завтра")
 
 @bot.message_handler(func=lambda message: message.text == 'Подписаться', content_types=['text'])
 def subscribe(message):
