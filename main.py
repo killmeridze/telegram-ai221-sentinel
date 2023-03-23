@@ -6,6 +6,11 @@ import sqlite3
 from threading import Thread
 import schedule as sc
 import settings
+from loguru import logger
+
+
+
+logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", level="DEBUG", rotation="10 MB", compression="zip")
 
 bot = telebot.TeleBot('5844782786:AAGqpYHZMmRZ3sfWdoGioA8FODBweFEG-eA') # main bot
 # bot = telebot.TeleBot('6018459380:AAFRJzPHYea3GxOwEhS3gLzf-L5XxjQQDts') # temp bot
@@ -15,17 +20,8 @@ def schedule_checker():
         sc.run_pending()
         sleep(1)
 
-def schedule_text() -> str:
+def schedule_text(today: datetime.date) -> str:
     """Функция для составления сообщения с расписанием"""
-    today = datetime.date.today()
-
-    #Проверка на чётность/нечётность False - нечётная, True - чётная
-    current_week_number = today.isocalendar()[1]
-    week_parity = False
-    if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
-        week_parity = False
-    else:
-        week_parity = True
 
     day_name_en = today.strftime('%A').lower()
     day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
@@ -38,6 +34,14 @@ def schedule_text() -> str:
         return message_text
 
     message_text = f"Расписание на {day_name_ru}:\n\n"
+
+    #Проверка на чётность/нечётность False - нечётная, True - чётная
+    current_week_number = today.isocalendar()[1]
+    week_parity = False
+    if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
+        week_parity = False
+    else:
+        week_parity = True
 
     for item in schedule:
         if item.get('week_parity') is None:
@@ -52,8 +56,12 @@ def schedule_text() -> str:
 
     return message_text
 
-def send_schedule(message_text: str):
+def send_schedule():
     """Функция для авторассылки сообщений"""
+    today = datetime.date.today()
+    
+    message_text = schedule_text(today)
+
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
@@ -62,6 +70,7 @@ def send_schedule(message_text: str):
 
     for subscriber in subscribers:
         bot.send_message(chat_id=subscriber[0], text=message_text)
+        logger.info(f"Sent schedule to user_id - {subscriber[0]} via autosending")
 
     conn.commit()
     conn.close()
@@ -75,15 +84,21 @@ def start(message):
     keyboard.row(button)
     keyboard.row(button_subscribe, button_unsubscribe)
     bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
+    logger.info(f"New user - {message.from_user.username}")
 
 @bot.message_handler(func=lambda message: message.text == 'Расписание', content_types=['text'])
 def schedule(message):
-    message_text = schedule_text()
+    today = datetime.date.today()
+
+    message_text = schedule_text(today)
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
+    logger.info(f"Sent schedule to {message.from_user.username}(user_id - {message.from_user.id}) via command /Расписание")
 
 @bot.message_handler(func=lambda message: message.text == 'Подписаться', content_types=['text'])
 def subscribe(message):
+    logger.info(f"User {message.from_user.id} tried to subscribe")
+
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
 
@@ -101,15 +116,19 @@ def subscribe(message):
     if subscribe_user:
         conn.commit()
         bot.reply_to(message, "Вы уже подписаны на рассылку!")
+        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already subscribed")
+
     else:
         cursor.execute('INSERT INTO subscriptions (user_id, subscription_time) VALUES (?, ?)', (user_id, subscription_time))
         conn.commit()
         bot.reply_to(message, "Вы успешно подписались на рассылку!")
+        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully subscribed")
 
     conn.close()
 
 @bot.message_handler(func=lambda message: message.text == 'Отписаться', content_types=['text'])
 def unsubscribe(message):
+    logger.info(f"User {message.from_user.id} tried to unsubscribe")
     user_id = message.chat.id
     subscription_time = datetime.datetime.now()
 
@@ -123,14 +142,16 @@ def unsubscribe(message):
         cursor.execute('DELETE FROM subscriptions WHERE user_id = ?', (user_id,))
         conn.commit()
         bot.reply_to(message, "Вы успешно отписались от рассылки!")
+        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully unsubscribed")
     else:
         conn.commit()
         bot.reply_to(message, "Вы не подписаны на рассылку!")
+        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already unsubscribed")
 
     conn.close()
 
 if __name__ == '__main__':
-    sc.every().day.at("07:00").do(send_schedule, schedule_text())
+    sc.every().day.at("07:00").do(send_schedule)
     
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()

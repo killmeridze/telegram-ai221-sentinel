@@ -153,3 +153,52 @@
 2023-03-10 01:17:25 - INFO - User ridzeeeee(user_id - 688575921) has been already subscribed
 2023-03-10 01:52:07 - INFO - Sent schedule to ridzeeeee(user_id - 688575921) via command /Расписание
 2023-03-10 01:53:55 - INFO - New user - ridzeeeee
+2023-03-10 10:20:35 - INFO - Sent schedule to ridzeeeee(user_id - 688575921) via command /Расписание
+2023-03-10 10:21:45 - INFO - Sent schedule to ridzeeeee(user_id - 688575921) via command /Расписание
+2023-03-10 10:22:00 - INFO - Sent schedule to ridzeeeee(user_id - 688575921) via command /Расписание
+2023-03-10 10:24:26 - INFO - New user - YokarniyBabai
+2023-03-10 10:24:30 - INFO - Sent schedule to YokarniyBabai(user_id - 700766922) via command /Расписание
+2023-03-10 10:24:36 - INFO - User 700766922 tried to unsubscribe
+2023-03-10 10:24:36 - INFO - User YokarniyBabai(user_id - 700766922) has successfully unsubscribed
+2023-03-10 10:24:36 - INFO - User YokarniyBabai(user_id - 700766922) has been already unsubscribed
+2023-03-10 10:24:46 - INFO - User 700766922 tried to subscribe
+2023-03-10 10:24:46 - INFO - User YokarniyBabai(user_id - 700766922) has successfully subscribed
+2023-03-10 10:25:06 - INFO - Sent schedule to YokarniyBabai(user_id - 700766922) via command /Расписание
+2023-03-10 10:25:10 - INFO - User 700766922 tried to subscribe
+2023-03-10 10:25:10 - INFO - User YokarniyBabai(user_id - 700766922) has been already subscribed
+2023-03-10 10:25:13 - INFO - User 700766922 tried to unsubscribe
+2023-03-10 10:25:13 - INFO - User YokarniyBabai(user_id - 700766922) has successfully unsubscribed
+2023-03-10 10:25:13 - INFO - User YokarniyBabai(user_id - 700766922) has been already unsubscribed
+2023-03-10 10:25:36 - INFO - Sent schedule to YokarniyBabai(user_id - 700766922) via command /Расписание
+2023-03-10 10:25:40 - INFO - User 700766922 tried to subscribe
+2023-03-10 10:25:40 - INFO - User YokarniyBabai(user_id - 700766922) has successfully subscribed
+2023-03-10 10:25:43 - INFO - User 700766922 tried to subscribe
+2023-03-10 10:25:43 - INFO - User YokarniyBabai(user_id - 700766922) has been already subscribed
+2023-03-10 10:25:46 - INFO - User 700766922 tried to unsubscribe
+2023-03-10 10:25:46 - INFO - User YokarniyBabai(user_id - 700766922) has successfully unsubscribed
+2023-03-10 10:25:47 - INFO - User 700766922 tried to unsubscribe
+2023-03-10 10:25:48 - INFO - User YokarniyBabai(user_id - 700766922) has been already unsubscribed
+2023-03-10 10:25:49 - INFO - User 700766922 tried to subscribe
+2023-03-10 10:25:50 - INFO - User YokarniyBabai(user_id - 700766922) has successfully subscribed
+2023-03-10 07:00:00 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-10 07:00:01 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-13 06:59:28 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-13 06:59:28 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-14 06:59:40 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-14 06:59:40 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-15 06:58:01 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-15 06:58:01 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-16 06:59:04 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-16 06:59:04 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-16 07:00:16 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-16 07:00:16 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-17 07:01:30 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-17 07:01:30 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-18 07:00:00 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-18 07:00:00 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-20 07:13:14 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-20 07:13:14 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-21 07:12:26 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-21 07:12:26 - INFO - Sent schedule to user_id - 688575921 via autosending
+2023-03-23 06:26:29 - INFO - Sent schedule to user_id - 700766922 via autosending
+2023-03-23 06:26:29 - INFO - Sent schedule to user_id - 688575921 via autosending
