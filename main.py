@@ -15,6 +15,7 @@ logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {messag
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
+TOKEN = "6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4"
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -160,7 +161,6 @@ def subscribe(message):
 def unsubscribe(message):
     logger.info(f"User {message.from_user.id} tried to unsubscribe")
     user_id = message.chat.id
-    subscription_time = datetime.datetime.now()
 
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
@@ -179,6 +179,36 @@ def unsubscribe(message):
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already unsubscribed")
 
     conn.close()
+
+@bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
+def change_language(message):
+    markup_inline = telebot.types.InlineKeyboardMarkup()
+    item_rus = telebot.types.InlineKeyboardButton(text='Русский', callback_data='rus')
+    item_ukr = telebot.types.InlineKeyboardButton(text='Украинский', callback_data='ukr')
+
+    markup_inline.add(item_rus, item_ukr)
+    bot.send_message(message.chat.id, "На какой язык поменять?", reply_markup=markup_inline)
+
+@bot.callback_query_handler(func=lambda call: True)
+def answer_change_language(call):
+    if call.data == 'rus':
+        db = sqlite3.connect("subscriptions.db")
+        cursor = db.cursor()
+        cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
+        bot.send_message(call.message.chat.id, "Ярусский, я иду до конца")
+        bot.answer_callback_query(call.id, "Язык поменян")
+        db.close()
+
+    elif call.data == 'ukr':
+        db = sqlite3.connect("subscriptions.db")
+        cursor = db.cursor()
+        cursor.execute("""UPDATE subscriptions SET language = 'ukr' WHERE user_id == ?""", (call.message.chat.id, ))
+        bot.send_message(call.message.chat.id, "Я українець")
+        bot.answer_callback_query(call.id, "Мову змінено")
+        db.close()
+
+    bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
+
 
 
 if __name__ == '__main__':
