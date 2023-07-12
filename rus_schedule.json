@@ -1,0 +1,113 @@
+{
+    "monday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Дискретная математика (Лекция)",
+            "links": [
+                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Операционные системы (Лекция)",
+            "links": [
+                "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
+                "\nЖелаю перенести еще одну неделю ада!"
+            ]
+        }
+    ],
+    "tuesday": [
+        {
+            "week_parity": false,
+            "time": "9:50-11:25\n",
+            "name": "Алгоритмизация непарна (Лаб)",
+            "links": [
+                "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
+                "Пароль: 893295\n"
+            ]
+        },
+        {
+            "week_parity": true,
+            "time": "9:50-11:25\n",
+            "name": "Алгоритмизация парна (Практика)",
+            "links": [
+            "https://us02web.zoom.us/j/89424759693?pwd=eDFjMnJSL1lpVDFEdjVDSWhnRTdLZz099",
+            "Пароль: 846495\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Дискретная математика (Практика)",
+            "links": [
+            "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
+            "Пароль: 4CiUX3\n",
+            "С днем терпения Денисенко и немецких крестов!"
+            ]
+        }
+    ],
+    "wednesday": [
+        {
+            "time": "8:00-9:35\n",
+            "name": "Английский язык",
+            "links": [
+            "https://us05web.zoom.us/j/5884802236?pwd=eDVCOVlLdHJ4ZmVDaVVQTFhtMml1Zz09",
+            "Пароль: 11111111\n"
+            ]
+        },
+        {
+            "time": "9:50-11:25\n",
+            "name": "Выш.мат (Лекция)",
+            "links": [
+            "https://us02web.zoom.us/j/6640162782?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
+            "Пароль: 8NWy4H\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Физика (Лекция)",
+            "links": [
+            "https://us02web.zoom.us/j/82738989553?pwd=ZEJ1Q05wekdSSWoyQ3NjK2VYY3FFZz09",
+            "\nTry not to die while listening to Tanuysha and Usov"
+            ]
+        }
+    ],
+    "thursday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Выш.мат (Практика)",
+            "links": [
+            "https://us05web.zoom.us/j/88252951933?pwd=MlZUdllYWE8rN3RVMTV5SmpjT2V6QT09",
+            "Пароль: 4c1zJM\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Операционные системы (Практика)",
+            "links": [
+            "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
+            "Пароль: 545377\n",
+            "Желиба и Блажко засолят, проверяй"
+            ]
+        }
+    ],
+    "friday": [
+        {
+            "time": "9:50-11:25\n",
+            "name": "Алгоритмизация (Лекция)",
+            "links": [
+            "https://us02web.zoom.us/j/89424759693?pwd=eDFjMnJSL1lpVDFEdjVDSWhnRTdLZz09",
+            "Пароль: 846495\n"
+            ]
+        },
+        {
+            "time": "11:40-13:15\n",
+            "name": "Физика (Лаб)",
+            "links": [
+            "*нет ссылки*",
+            "\nНадеюсь у тебя стоит будильник на 11:40"
+            ]
+        }
+    ],
+    "saturday": [],
+    "sunday": []
+ }
