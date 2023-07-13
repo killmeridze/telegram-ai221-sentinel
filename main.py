@@ -213,6 +213,8 @@ def change_language(message):
 @bot.callback_query_handler(func=lambda call: True)
 def answer_change_language(call):
     user_id = call.message.chat.id
+    language = ''
+    
     if call.data == 'rus':
         db = sqlite3.connect("subscriptions.db")
         cursor = db.cursor()
@@ -220,6 +222,9 @@ def answer_change_language(call):
         cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
         bot.send_message(call.message.chat.id, "Ярусский, я иду до конца")
         bot.answer_callback_query(call.id, "Язык поменян")
+        
+        language = 'rus'
+        
         db.close()
 
     elif call.data == 'ukr':
@@ -228,9 +233,19 @@ def answer_change_language(call):
         cursor.execute("""UPDATE subscriptions SET language = 'ukr' WHERE user_id == ?""", (call.message.chat.id, ))
         bot.send_message(call.message.chat.id, "Я українець")
         bot.answer_callback_query(call.id, "Мову змінено")
+        
+        language = 'ukr'
+        
         db.close()
+    
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+    cursor.execute('UPDATE subscriptions SET language = ? WHERE user_id = ?', (language, user_id))
+    conn.commit()
+    conn.close()
 
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
+
 
 
 
