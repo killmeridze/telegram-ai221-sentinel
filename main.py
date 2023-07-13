@@ -227,8 +227,45 @@ def unsubscribe(message):
 
     conn.close()
 
+@bot.message_handler(func=lambda message: message.text == "/send_all", content_types=["text"])
+def get_text_to_send_all(message):
+    conn = sqlite3.connect("subscriptions.db")
+    cursor = conn.cursor()
+    cursor.execute("""SELECT is_admin, language FROM subscriptions WHERE user_id = ?""", (message.chat.id, ))
+    user_is_admin, user_language = cursor.fetchone()
+    conn.commit()
+    conn.close()
+
+    # todo: логирование
+    if not user_is_admin:
+        bot.reply_to(message, "У вас нет прав на это" if user_language == "rus" else "У вас нема прав для цього")
+        return
+    
+    msg = bot.reply_to(message, "Что вы хотите отправить всем?" if user_language == "rus" else "Що ви хочете відправити усім?")
+
+    bot.register_next_step_handler(msg, send_all)
+
+def send_all(message):
+    conn = sqlite3.connect("subscriptions.db")
+    cursor = conn.cursor()
+    cursor.execute("""SELECT user_id FROM subscriptions""")
+
+    users_ids = cursor.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    for user_id in users_ids[0]:
+        if user_id == message.chat.id:
+            continue
+        # todo: логирование
+        bot.send_message(user_id, message.text)
+
+
+
 @bot.message_handler(func=lambda message: message.text in ["Поменять язык", "Змінити мову"], content_types=["text"])
 def change_language(message):
+    # todo: логирование
     language: str = get_user_language(message.chat.id)
     keyboard = telebot.types.InlineKeyboardMarkup()
     rus_lang = telebot.types.InlineKeyboardButton(text="Русский", callback_data="rus")
@@ -239,6 +276,7 @@ def change_language(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def answer_change_language(call):
+    # todo: логирование
     user_language = get_user_language(call.message.chat.id)
 
     if call.data == "rus":
@@ -250,7 +288,6 @@ def answer_change_language(call):
         cursor = conn.cursor()
 
         cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
-        bot.send_message(call.message.chat.id, "Ярусский, я иду до конца")
         bot.answer_callback_query(call.id, "Язык поменян")
 
         conn.commit()
@@ -264,7 +301,6 @@ def answer_change_language(call):
         conn = sqlite3.connect("subscriptions.db")
         cursor = conn.cursor()
         cursor.execute("""UPDATE subscriptions SET language = 'ukr' WHERE user_id == ?""", (call.message.chat.id, ))
-        bot.send_message(call.message.chat.id, "Я українець")
         bot.answer_callback_query(call.id, "Мову змінено")
 
         conn.commit()
