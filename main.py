@@ -15,7 +15,7 @@ logger.add("logging.log", format="{time:YYYY-MM-DD HH:mm:ss} - {level} - {messag
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
-TOKEN = "6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4"
+# TOKEN = "6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4"
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -24,14 +24,19 @@ def schedule_checker():
         sc.run_pending()
         sleep(1)
 
-def schedule_text(today: datetime.date) -> str:
+def schedule_text(today: datetime.date, language: str) -> str:
     """Функция для составления сообщения с расписанием"""
 
     day_name_en = today.strftime('%A').lower()
     day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
 
-    with open('schedule.json', 'r', encoding='utf-8') as f:
+    schedule_file = f'{language}_schedule.json'
+    
+    with open('schedule_file', 'r', encoding='utf-8') as f:
         schedule = json.load(f).get(day_name_en)
+
+    # with open('schedule.json', 'r', encoding='utf-8') as f:
+    #     schedule = json.load(f).get(day_name_en)
 
     if not schedule:
         message_text = "Ты бессмертн(-ый/-ая) что ли? Иди проспись"
@@ -88,6 +93,40 @@ def send_schedule():
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    logger.info(f"New user - {message.from_user.username}")
+
+    username = message.from_user.username
+    user_id = message.chat.id
+    subscribed = 0
+    language = 'ukr'
+    is_admin = 0
+
+    if user_id in [688575921,700766922]: # admins
+        is_admin = 1
+
+    conn = sqlite3.connect('subscriptions.db')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
+                (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT,
+                user_id INTEGER NOT NULL,
+                subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
+                language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')),
+                is_admin INTEGER NOT NULL CHECK (is_admin IN (0, 1)))''')
+
+    cursor.execute('SELECT * FROM subscriptions WHERE user_id = ?', (user_id,))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        cursor.execute('''UPDATE subscriptions 
+            SET username = ?, subscribed = ?, language = ?, is_admin = ? 
+            WHERE user_id = ?''',
+            (username, subscribed, language, is_admin, user_id))
+    else:
+        cursor.execute('INSERT INTO subscriptions (username, user_id, subscribed, language, is_admin) VALUES (?, ?, ?, ?, ?)',
+            (username, user_id, subscribed, language, is_admin))
+    conn.commit()
+
     button = telebot.types.KeyboardButton('Расписание')
     button_tomorrow = telebot.types.KeyboardButton('Расписание на завтра')  # новая кнопка
     button_subscribe = telebot.types.KeyboardButton('Подписаться')
@@ -96,7 +135,8 @@ def start(message):
     keyboard.row(button, button_tomorrow)  # добавление новой кнопки в клавиатуру
     keyboard.row(button_subscribe, button_unsubscribe)
     bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
-    logger.info(f"New user - {message.from_user.username}")
+
+    conn.close()
 
 @bot.message_handler(func=lambda message: message.text == 'Расписание', content_types=['text'])
 def schedule(message):
@@ -120,37 +160,19 @@ def schedule_tomorrow(message):
 def subscribe(message):
     logger.info(f"User {message.from_user.id} tried to subscribe")
 
-    username = message.from_user.username
     user_id = message.chat.id
-    subscription_time = datetime.datetime.now()
-    group_number = 1 # kogda budet realizaciya zaprosa na vvod grupi - pomenyaem
-    subscribed = 0 # vrode norm rabotaet
-    language = 'ukr' # same shit
 
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS subscriptions
-                (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT,
-                user_id INTEGER NOT NULL,
-                subscription_time TEXT NOT NULL,
-                group_number INTEGER NOT NULL CHECK (group_number IN (1, 2)),
-                subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
-                language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')))''')
+    cursor.execute('SELECT subscribed FROM subscriptions WHERE user_id = ?', (user_id,))
+    subscribed = cursor.fetchone()[0]
 
-
-    cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
-    subscribe_user = cursor.fetchone()
-
-    if subscribe_user:
-        conn.commit()
+    if subscribed == 1:
         bot.reply_to(message, "Вы уже подписаны на рассылку!")
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already subscribed")
-
     else:
-        cursor.execute('INSERT INTO subscriptions (username, user_id, group_number, subscribed, language, subscription_time) VALUES (?, ?, ?, ?, ?, ?)',
-                (username, user_id, group_number, 1, language, subscription_time))
+        cursor.execute('UPDATE subscriptions SET subscribed = 1 WHERE user_id = ?', (user_id,))
         conn.commit()
         bot.reply_to(message, "Вы успешно подписались на рассылку!")
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully subscribed")
@@ -165,18 +187,17 @@ def unsubscribe(message):
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT user_id FROM subscriptions WHERE user_id = ?', (user_id,))
-    unsubscribe_user = cursor.fetchone()
+    cursor.execute('SELECT subscribed FROM subscriptions WHERE user_id = ?', (user_id,))
+    subscribed = cursor.fetchone()[0]
 
-    if unsubscribe_user:
-        cursor.execute('DELETE FROM subscriptions WHERE user_id = ?', (user_id,))
+    if subscribed == 0:
+        bot.reply_to(message, "Вы не подписаны на рассылку!")
+        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already unsubscribed")
+    else:
+        cursor.execute('UPDATE subscriptions SET subscribed = 0 WHERE user_id = ?', (user_id,))
         conn.commit()
         bot.reply_to(message, "Вы успешно отписались от рассылки!")
         logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has successfully unsubscribed")
-    else:
-        conn.commit()
-        bot.reply_to(message, "Вы не подписаны на рассылку!")
-        logger.info(f"User {message.from_user.username}(user_id - {message.from_user.id}) has been already unsubscribed")
 
     conn.close()
 
@@ -191,9 +212,11 @@ def change_language(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def answer_change_language(call):
+    user_id = call.message.chat.id
     if call.data == 'rus':
         db = sqlite3.connect("subscriptions.db")
         cursor = db.cursor()
+
         cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
         bot.send_message(call.message.chat.id, "Ярусский, я иду до конца")
         bot.answer_callback_query(call.id, "Язык поменян")
@@ -212,7 +235,6 @@ def answer_change_language(call):
 
 
 if __name__ == '__main__':
-    # sc.every().day.at("07:00").do(send_schedule)
     sc.every().monday.at("07:00").do(send_schedule)
     sc.every().tuesday.at("07:00").do(send_schedule)
     sc.every().wednesday.at("07:00").do(send_schedule)
