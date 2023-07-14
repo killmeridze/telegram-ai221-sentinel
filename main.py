@@ -14,8 +14,8 @@ logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {messag
 
 load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
-# TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
+# TOKEN = os.getenv('TOKEN')
+TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -109,6 +109,23 @@ def get_user_language(chat_id) -> str:
 
     return language
 
+def update_buttons(language, is_admin) -> None:
+    button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule'])
+    button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule_tomorrow'])
+    button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['subscribe'])
+    button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['unsubscribe'])
+    button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['change_language'])
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.row(button, button_tomorrow)
+    keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
+
+    if is_admin:
+        button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['send_all'])
+        keyboard.row(button_send_all)
+
+    return keyboard
+
+
 with open('button_texts.json', 'r', encoding='utf-8') as file:
     BUTTON_TEXTS = json.load(file)
 
@@ -116,7 +133,7 @@ with open('button_texts.json', 'r', encoding='utf-8') as file:
 def start(message):
     logger.info(f'New user - {message.from_user.username}')
 
-    username = message.from_user.username
+    username = message.chat.username
     user_id = message.chat.id
     subscribed = 0
     language = get_user_language(message.chat.id)
@@ -150,18 +167,21 @@ def start(message):
     conn.commit()
     conn.close()
 
-    button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule'])
-    button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule_tomorrow'])
-    button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['subscribe'])
-    button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['unsubscribe'])
-    button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['change_language'])
-    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.row(button, button_tomorrow)
-    keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
+    # button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule'])
+    # button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule_tomorrow'])
+    # button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['subscribe'])
+    # button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['unsubscribe'])
+    # button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['change_language'])
+    # keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    # keyboard.row(button, button_tomorrow)
+    # keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
 
-    if is_admin:
-        button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['send_all'])
-        keyboard.row(button_send_all)
+    # if is_admin:
+    #     button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['send_all'])
+    #     keyboard.row(button_send_all)
+
+    keyboard = update_buttons(language, is_admin)
+
     bot.send_message(chat_id=message.chat.id, text=BUTTON_TEXTS[language]['welcome_message'], reply_markup=keyboard)
 
 @bot.message_handler(func=lambda message: message.text in ['Расписание', 'Розклад'], content_types=['text'])
@@ -286,7 +306,7 @@ def answer_change_language(call):
     if call.data == 'rus':
         if user_language == 'rus':
             bot.answer_callback_query(call.id, 'Этот язык уже выбран')
-            logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) already has russian language')
+            logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) already has russian language')
             return
         
         conn = sqlite3.connect('subscriptions.db')
@@ -295,16 +315,24 @@ def answer_change_language(call):
         cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
         
         conn.commit()
+
+        cursor.execute("""SELECT is_admin FROM subscriptions WHERE user_id == ?""", (call.message.chat.id, ))
+
+        is_admin = cursor.fetchone()[0]
         conn.close()
         
         bot.answer_callback_query(call.id, 'Язык поменян')
-        start(call.message)
-        logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) changed language to russian')
+        
+        keyboard = update_buttons(user_language, is_admin)
+
+        logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to russian')
+
+        bot.send_message(chat_id=call.message.chat.id, text='Теперь стоит русский язык' if user_language == 'rus' else 'Тепер використовується українська', reply_markup=keyboard)
 
     elif call.data == 'ukr':
         if user_language == 'ukr':
             bot.answer_callback_query(call.id, 'Ця мова вже обрана')
-            logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) already has ukrainian language')
+            logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) already has ukrainian language')
             return
         
         conn = sqlite3.connect('subscriptions.db')
@@ -317,7 +345,7 @@ def answer_change_language(call):
 
         bot.answer_callback_query(call.id, 'Мову змінено')
         start(call.message)
-        logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) changed language to ukrainian')
+        logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to ukrainian')
 
 
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
