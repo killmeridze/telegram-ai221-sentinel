@@ -1,0 +1,20 @@
+{
+    "rus": {
+        "schedule": "Расписание",
+        "schedule_tomorrow": "Расписание на завтра",
+        "subscribe": "Подписаться",
+        "unsubscribe": "Отписаться",
+        "change_language": "Поменять язык",
+        "send_all": "Сделать рассылку",
+        "welcome_message": "Привет, сливка! Нажми на кнопку, чтобы получить расписание!"
+    },
+    "ukr": {
+        "schedule": "Розклад",
+        "schedule_tomorrow": "Розклад на завтра",
+        "subscribe": "Підписатися",
+        "unsubscribe": "Відписатися",
+        "change_language": "Змінити мову",
+        "send_all": "Зробити розсилку",
+        "welcome_message": "Привіт, слiвка! Натисни на кнопку, щоб отримати розклад!"
+    }
+}

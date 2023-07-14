@@ -109,7 +109,8 @@ def get_user_language(chat_id) -> str:
 
     return language
 
-
+with open('button_texts.json', 'r', encoding='utf-8') as file:
+    BUTTON_TEXTS = json.load(file)
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -118,7 +119,7 @@ def start(message):
     username = message.from_user.username
     user_id = message.chat.id
     subscribed = 0
-    language = 'ukr'
+    language = get_user_language(message.chat.id)
     is_admin = 0
 
     if user_id in [688575921, 700766922]: # admins
@@ -149,23 +150,21 @@ def start(message):
     conn.commit()
     conn.close()
 
-    # todo: отдельные кнопки для укр и рус языков
-    button = telebot.types.KeyboardButton('Расписание')
-    button_tomorrow = telebot.types.KeyboardButton('Расписание на завтра')  # новая кнопка
-    button_subscribe = telebot.types.KeyboardButton('Подписаться')
-    button_unsubscribe = telebot.types.KeyboardButton('Отписаться')
-    button_change_language = telebot.types.KeyboardButton('Поменять язык')
+    button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule'])
+    button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule_tomorrow'])
+    button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['subscribe'])
+    button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['unsubscribe'])
+    button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['change_language'])
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.row(button, button_tomorrow)  # добавление новой кнопки в клавиатуру
+    keyboard.row(button, button_tomorrow)
     keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
 
     if is_admin:
-        button_send_all = telebot.types.KeyboardButton('Сделать рассылку')
+        button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['send_all'])
         keyboard.row(button_send_all)
-    bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
+    bot.send_message(chat_id=message.chat.id, text=BUTTON_TEXTS[language]['welcome_message'], reply_markup=keyboard)
 
-# todo: в хендлерах добавить варианты текста на украинском
-@bot.message_handler(func=lambda message: message.text == 'Расписание', content_types=['text'])
+@bot.message_handler(func=lambda message: message.text in ['Расписание', 'Розклад'], content_types=['text'])
 def schedule(message):
     today = datetime.date.today()
     user_language = get_user_language(message.chat.id)
@@ -174,7 +173,7 @@ def schedule(message):
     bot.send_message(chat_id=message.chat.id, text=message_text)
     logger.info(f'Sent schedule to {message.from_user.username}(user_id - {message.from_user.id}) via command Расписание')
 
-@bot.message_handler(func=lambda message: message.text == 'Расписание на завтра', content_types=['text'])
+@bot.message_handler(func=lambda message: message.text in ['Расписание на завтра', 'Розклад на завтра'], content_types=['text'])
 def schedule_tomorrow(message):
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
     user_language = get_user_language(message.chat.id)
@@ -183,7 +182,7 @@ def schedule_tomorrow(message):
     bot.send_message(chat_id=message.chat.id, text=message_text)
     logger.info(f'Sent schedule to {message.from_user.username}(user_id - {message.from_user.id}) via command Расписание на завтра')
 
-@bot.message_handler(func=lambda message: message.text == 'Подписаться', content_types=['text'])
+@bot.message_handler(func=lambda message: message.text in ['Подписаться', 'Підписатися'], content_types=['text'])
 def subscribe(message):
     user_language = get_user_language(message.chat.id)
     user_id = message.chat.id
@@ -206,7 +205,7 @@ def subscribe(message):
 
     conn.close()
 
-@bot.message_handler(func=lambda message: message.text == 'Отписаться', content_types=['text'])
+@bot.message_handler(func=lambda message: message.text in ['Отписаться', 'Відписатися'], content_types=['text'])
 def unsubscribe(message):
     language = get_user_language(message.chat.id)
     user_id = message.chat.id
@@ -229,7 +228,7 @@ def unsubscribe(message):
 
     conn.close()
 
-@bot.message_handler(func=lambda message: message.text == "Сделать рассылку", content_types=["text"])
+@bot.message_handler(func=lambda message: message.text in ['Сделать рассылку', 'Зробити розсилку'], content_types=["text"])
 def get_text_to_send_all(message):
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
@@ -286,7 +285,7 @@ def answer_change_language(call):
 
     if call.data == 'rus':
         if user_language == 'rus':
-            bot.answer_callback_query(call.id, 'Этот язык уже стоит')
+            bot.answer_callback_query(call.id, 'Этот язык уже выбран')
             logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) already has russian language')
             return
         
@@ -299,11 +298,12 @@ def answer_change_language(call):
         conn.close()
         
         bot.answer_callback_query(call.id, 'Язык поменян')
+        start(call.message)
         logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) changed language to russian')
 
     elif call.data == 'ukr':
         if user_language == 'ukr':
-            bot.answer_callback_query(call.id, 'Ця мова вже стоїть')
+            bot.answer_callback_query(call.id, 'Ця мова вже обрана')
             logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) already has ukrainian language')
             return
         
@@ -316,6 +316,7 @@ def answer_change_language(call):
         conn.close()
 
         bot.answer_callback_query(call.id, 'Мову змінено')
+        start(call.message)
         logger.info(f'User {call.message.from_user.username}(user_id - {call.message.from_user.id}) changed language to ukrainian')
 
 
