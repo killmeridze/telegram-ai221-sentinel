@@ -14,8 +14,8 @@ logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {messag
 
 load_dotenv()
 
-# TOKEN = os.getenv('TOKEN')
-TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
+TOKEN = os.getenv('TOKEN')
+# TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -35,9 +35,6 @@ def schedule_text(today: datetime.date, language: str) -> str:
     
     with open(schedule_file, 'r', encoding='utf-8') as f:
         schedule = json.load(f).get(day_name_en)
-
-    # with open('schedule.json', 'r', encoding='utf-8') as f:
-    #     schedule = json.load(f).get(day_name_en)
 
     if language == 'rus':
         if not schedule:
@@ -157,10 +154,14 @@ def start(message):
     button_tomorrow = telebot.types.KeyboardButton('Расписание на завтра')  # новая кнопка
     button_subscribe = telebot.types.KeyboardButton('Подписаться')
     button_unsubscribe = telebot.types.KeyboardButton('Отписаться')
+    button_change_language = telebot.types.KeyboardButton('Поменять язык')
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(button, button_tomorrow)  # добавление новой кнопки в клавиатуру
-    keyboard.row(button_subscribe, button_unsubscribe)
+    keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
 
+    if is_admin:
+        button_send_all = telebot.types.KeyboardButton('Сделать рассылку')
+        keyboard.row(button_send_all)
     bot.send_message(chat_id=message.chat.id, text=f'Привет, сливка! Нажми на кнопку, чтобы получить расписание!', reply_markup=keyboard)
 
 # todo: в хендлерах добавить варианты текста на украинском
@@ -228,7 +229,7 @@ def unsubscribe(message):
 
     conn.close()
 
-@bot.message_handler(func=lambda message: message.text == "/send_all", content_types=["text"])
+@bot.message_handler(func=lambda message: message.text == "Сделать рассылку", content_types=["text"])
 def get_text_to_send_all(message):
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
@@ -259,10 +260,10 @@ def send_all(message):
     conn.commit()
     conn.close()
 
-    for user_id in users_ids[0]:
-        if user_id == message.chat.id:
+    for user_id in users_ids:
+        if user_id[0] == message.chat.id:
             continue
-        bot.send_message(user_id, message.text)
+        bot.send_message(user_id[0], message.text)
         logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent {message.text} to {user_id} via /send_all')
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
