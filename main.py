@@ -86,7 +86,7 @@ def send_schedule() -> None:
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT user_id FROM subscriptions""")
+    cursor.execute("""SELECT user_id FROM subscriptions WHERE subscribed == 1""")
     subscribers = cursor.fetchall()
 
     for subscriber in subscribers:
@@ -281,15 +281,23 @@ def send_all(message):
 
     conn.commit()
     conn.close()
+    
+    successful_sends = 0
+    total_users = 0
 
     for user_id in users_ids:
         if user_id[0] == message.chat.id:
 
             continue
-        bot.send_message(user_id[0], message.text)
-        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent {message.text} to {user_id} via /send_all')
-    
-
+        try:
+            bot.send_message(user_id[0], message.text)
+            logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent {message.text} to {user_id} via /send_all')
+            successful_sends += 1
+        except telebot.apihelper.ApiException as e:
+            logger.warning(f'Failed to send a message to user_id - {user_id}: {e}')
+        total_users +=1
+        
+    bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей: \n{message.text}')
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
 def change_language(message):
