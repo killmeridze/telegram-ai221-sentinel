@@ -63,34 +63,23 @@ def schedule_text(today: datetime.date, language: str) -> str:
             for link in item["links"]:
                 message_text += f"{link}\n"
 
-        # elif item.get('week_parity') is week_parity:
-        #     message_text += f"{item['time']}{item['name']}:\n"
-        #     for link in item["links"]:
-        #         message_text += f"{link}\n"
-
     return message_text
 
-# * Я закоментил и сделал просто вызов функии schedule_text с завтрашним днём
-# def schedule_tomorrow_text(today: datetime.date) -> str:
-#     """Функция для составления сообщения с расписанием на завтра"""
-
-#     tomorrow = today + datetime.timedelta(days=1)
-#     return schedule_text(tomorrow, 'ukr')
 
 def send_schedule() -> None:
     '''Функция для авторассылки сообщений'''
     today = datetime.date.today()
     
-    message_text = schedule_text(today, 'ukr')
 
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT user_id FROM subscriptions WHERE subscribed == 1""")
-    subscribers = cursor.fetchall()
+    cursor.execute("""SELECT user_id, language FROM subscriptions WHERE subscribed == 1""")
+    subscribers, language = cursor.fetchall()
 
     for subscriber in subscribers:
         try:
+            message_text = schedule_text(today, language)
             bot.send_message(chat_id=subscriber[0], text=message_text)
             logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
         except telebot.apihelper.ApiException as e:
@@ -169,19 +158,6 @@ def start(message):
         
     conn.commit()
     conn.close()
-
-    # button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule'])
-    # button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['schedule_tomorrow'])
-    # button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['subscribe'])
-    # button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['unsubscribe'])
-    # button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['change_language'])
-    # keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    # keyboard.row(button, button_tomorrow)
-    # keyboard.row(button_subscribe, button_unsubscribe,button_change_language)
-
-    # if is_admin:
-    #     button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]['send_all'])
-    #     keyboard.row(button_send_all)
 
     keyboard = update_buttons(language, is_admin)
 
