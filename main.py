@@ -136,7 +136,7 @@ def start(message):
     username = message.chat.username
     user_id = message.chat.id
     subscribed = 0
-    language = get_user_language(message.chat.id)
+    language = 'rus'
     is_admin = 0
 
     if user_id in [688575921, 700766922]: # admins
@@ -281,9 +281,12 @@ def send_all(message):
 
     for user_id in users_ids:
         if user_id[0] == message.chat.id:
+
             continue
         bot.send_message(user_id[0], message.text)
         logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent {message.text} to {user_id} via /send_all')
+    
+
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
 def change_language(message):
@@ -352,7 +355,7 @@ def answer_change_language(call):
         logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to ukrainian')
 
         bot.send_message(chat_id=call.message.chat.id, text='Тепер використовується українська', reply_markup=keyboard)
-        
+
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
 
