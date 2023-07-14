@@ -69,17 +69,16 @@ def schedule_text(today: datetime.date, language: str) -> str:
 def send_schedule() -> None:
     '''Функция для авторассылки сообщений'''
     today = datetime.date.today()
-    
 
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
 
     cursor.execute("""SELECT user_id, language FROM subscriptions WHERE subscribed == 1""")
-    subscribers, language = cursor.fetchall()
+    subscribers = cursor.fetchall()
 
     for subscriber in subscribers:
         try:
-            message_text = schedule_text(today, language)
+            message_text = schedule_text(today, subscriber[1])
             bot.send_message(chat_id=subscriber[0], text=message_text)
             logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
         except telebot.apihelper.ApiException as e:
@@ -116,7 +115,6 @@ def update_buttons(language, is_admin) -> None:
         keyboard.row(button_send_all)
 
     return keyboard
-
 
 with open('button_texts.json', 'r', encoding='utf-8') as file:
     BUTTON_TEXTS = json.load(file)
