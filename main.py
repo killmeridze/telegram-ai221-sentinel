@@ -327,7 +327,7 @@ def answer_change_language(call):
 
         logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to russian')
 
-        bot.send_message(chat_id=call.message.chat.id, text='Тепер використовується українська', reply_markup=keyboard)
+        bot.send_message(chat_id=call.message.chat.id, text='Теперь стоит русский язык', reply_markup=keyboard)
 
     elif call.data == 'ukr':
         if user_language == 'ukr':
@@ -353,7 +353,7 @@ def answer_change_language(call):
         
         logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to ukrainian')
 
-        bot.send_message(chat_id=call.message.chat.id, text='Теперь стоит русский язык', reply_markup=keyboard)
+        bot.send_message(chat_id=call.message.chat.id, text='Тепер використовується українська', reply_markup=keyboard)
 
 
 
