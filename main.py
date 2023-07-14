@@ -14,8 +14,8 @@ logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {messag
 
 load_dotenv()
 
-# TOKEN = os.getenv('TOKEN')
-TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
+TOKEN = os.getenv('TOKEN')
+# TOKEN = '6052649938:AAHRY1Ndy3wB378cidObLPspazWka1AEOW4'
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -90,8 +90,11 @@ def send_schedule() -> None:
     subscribers = cursor.fetchall()
 
     for subscriber in subscribers:
-        bot.send_message(chat_id=subscriber[0], text=message_text)
-        logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
+        try:
+            bot.send_message(chat_id=subscriber[0], text=message_text)
+            logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
+        except telebot.apihelper.ApiException as e:
+            logger.warning(f'Failed to send a schedule to user_id - {subscriber[0]}: {e}')
 
     conn.commit()
     conn.close()
@@ -136,7 +139,7 @@ def start(message):
     username = message.chat.username
     user_id = message.chat.id
     subscribed = 0
-    language = get_user_language(message.chat.id)
+    language = 'rus'
     is_admin = 0
 
     if user_id in [688575921, 700766922]: # admins
