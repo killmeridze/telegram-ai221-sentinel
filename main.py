@@ -314,16 +314,15 @@ def answer_change_language(call):
 
         cursor.execute("""UPDATE subscriptions SET language = 'rus' WHERE user_id == ?""", (call.message.chat.id, ))
         
-        conn.commit()
-
         cursor.execute("""SELECT is_admin FROM subscriptions WHERE user_id == ?""", (call.message.chat.id, ))
-
         is_admin = cursor.fetchone()[0]
+        
+        conn.commit()
         conn.close()
         
         bot.answer_callback_query(call.id, 'Язык поменян')
         
-        keyboard = update_buttons('ukr', is_admin)
+        keyboard = update_buttons('rus', is_admin)
 
         logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to russian')
 
@@ -340,23 +339,20 @@ def answer_change_language(call):
         
         cursor.execute("""UPDATE subscriptions SET language = 'ukr' WHERE user_id == ?""", (call.message.chat.id, ))
         
-        conn.commit()
-
         cursor.execute("""SELECT is_admin FROM subscriptions WHERE user_id == ?""", (call.message.chat.id, ))
-        is_admin = cursor.fetchone()[0]
-
+        is_admin = cursor.fetchone()[0]        
+        
+        conn.commit()
         conn.close()
 
         bot.answer_callback_query(call.id, 'Мову змінено')
         
-        keyboard = update_buttons('rus', is_admin)
+        keyboard = update_buttons('ukr', is_admin)
         
         logger.info(f'User {call.message.chat.username}(user_id - {call.message.chat.id}) changed language to ukrainian')
 
         bot.send_message(chat_id=call.message.chat.id, text='Тепер використовується українська', reply_markup=keyboard)
-
-
-
+        
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
 
