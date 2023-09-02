@@ -218,7 +218,12 @@ def unsubscribe(message):
     cursor = conn.cursor()
 
     cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-    subscribed = cursor.fetchone()[0]
+    result = cursor.fetchone()
+
+    if result is None:
+        subscribed = False
+    else:
+        subscribed = result[0]
 
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to unsubscribe')
     if not subscribed:
