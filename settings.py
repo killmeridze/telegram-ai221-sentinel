@@ -1,4 +1,4 @@
-FIRST_WEEK_NUMBER = 10
+FIRST_WEEK_NUMBER = 36
 
 weekday_name_ru_dict = {
     "monday": "Понедельник",

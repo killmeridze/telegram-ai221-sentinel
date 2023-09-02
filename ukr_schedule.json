@@ -1,110 +1,115 @@
 {
     "monday": [
         {
-            "time": "9:50-11:25\n",
-            "name": "Дискретна математика (Лекція)",
+            "time": "8:00-9:35\n",
+            "name": "Вибіркова дисципліна загальної підготовки",
             "links": [
-                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09\n"
+                "*Немає посилання*\n"
+            ]
+        },
+        {
+            "time": "9:50-11:25\n",
+            "name": "Об'єктно-орієнтоване програмування (Лекція)",
+            "links": [
+                "bit.ly/hodovychenko_zoom\n"
             ]
         },
         {
             "time": "11:40-13:15\n",
-            "name": "Операційні системи (Лекція)",
+            "name": "Теорія ймовірностей та мат.статистика (Лекція)",
             "links": [
-                "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
-                "\nБажаю перенести ще один тиждень пекла!"
+                "https://us04web.zoom.us/j/6592901524?pwd=TFpiSHhTdnpxU0FPdFNVQ3d2eU1sdz09",
+                "Пароль: xUwk87\n"
             ]
         }
     ],
     "tuesday": [
         {
-            "week_parity": false,
-            "time": "9:50-11:25\n",
-            "name": "Алгоритмізація непарна (Лаб)",
+            "time": "8:00-9:35\n",
+            "name": "Вибіркова дисципліна загальної підготовки",
             "links": [
-                "https://zoom.us/j/98778795282?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
-                "Пароль: 893295\n"
+                "*Немає посилання*\n"
             ]
         },
         {
-            "week_parity": true,
             "time": "9:50-11:25\n",
-            "name": "Алгоритмізація парна (Практика)",
+            "name": "Теорія алгоритмів (Лекція)",
             "links": [
-            "https://us02web.zoom.us/j/89424759693?pwd=eDFjMnJSL1lpVDFEdjVDSWhnRTdLZz099",
-            "Пароль: 846495\n"
+                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
+                "Пароль: 779285\n"
             ]
         },
         {
             "time": "11:40-13:15\n",
-            "name": "Дискретна математика (Практика)",
+            "name": "Інструментальні засоби в IoT (Лекція)",
             "links": [
-            "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
-            "Пароль: 4CiUX3\n",
-            "З днем терпіння Денисенко та німецьких крестів!"
+                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09\n"
             ]
         }
     ],
     "wednesday": [
         {
-            "time": "8:00-9:35\n",
-            "name": "Англійська мова",
-            "links": [
-            "https://us05web.zoom.us/j/5884802236?pwd=eDVCOVlLdHJ4ZmVDaVVQTFhtMml1Zz09",
-            "Пароль: 11111111\n"
-            ]
-        },
-        {
+            "week-parity": false,
             "time": "9:50-11:25\n",
-            "name": "Виш.мат (Лекція)",
+            "name": "Інструментальні засоби в IoT (Лаб)",
             "links": [
-            "https://us02web.zoom.us/j/6640162782?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
-            "Пароль: 8NWy4H\n"
+                "http://meet.google.com/jvx-hgjw-uef\n"
             ]
         },
         {
-            "time": "11:40-13:15\n",
-            "name": "Фізика (Лекція)",
+            "week-parity": true,
+            "time": "9:50-11:25\n",
+            "name": "Теорія алгоритмів (Лаб)",
             "links": [
-            "https://us02web.zoom.us/j/82738989553?pwd=ZEJ1Q05wekdSSWoyQ3NjK2VYY3FFZz09",
-            "\nTry not to die while listening to Tanuysha and Usov"
+                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09\n"
+            ]
+        },
+        {
+            "week-parity": true,
+            "time": "11:40-13:15\n",
+            "name": "Теорія ймовірностей (Практика)",
+            "links": [
+                "*Немає посилання*\n"
             ]
         }
     ],
     "thursday": [
         {
-            "time": "9:50-11:25\n",
-            "name": "Виш.мат (Практика)",
+            "week-parity": false,
+            "time": "8:00-9:35\n",
+            "name": "Українська мова за проф. спрямуванням (Лекція)",
             "links": [
-            "https://us05web.zoom.us/j/88252951933?pwd=MlZUdllYWE8rN3RVMTV5SmpjT2V6QT09",
-            "Пароль: 4c1zJM\n"
+                "*Немає посилання*\n"
+            ]
+        },
+        {
+            "time": "9:50-11:25\n",
+            "name": "Організація баз даних та знань (Лекція)",
+            "links": [
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09\n"
             ]
         },
         {
             "time": "11:40-13:15\n",
-            "name": "Операційні системи (Лаб)",
+            "name": "Організація баз даних та знань (Лаб)",
             "links": [
-            "https://us02web.zoom.us/j/87688751716?pwd=MnlJa2pXN1dGeUgwMUprdjJwODJzQT09",
-            "Пароль: 545377\n",
-            "Желіба та Блажко засолять, перевіряй"
+                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09\n"
             ]
         }
     ],
     "friday": [
         {
-            "time": "9:50-11:25\n",
-            "name": "Алгоритмізація (Лекція)",
+            "time": "8:00-9:35\n",
+            "name": "Об'єктно-орієнтоване програмування (Лаб)",
             "links": [
-            "https://us02web.zoom.us/j/89424759693?pwd=eDFjMnJSL1lpVDFEdjVDSWhnRTdLZz09",
-            "Пароль: 846495\n"
+                "bit.ly/hodovychenko_zoom\n"
             ]
         },
         {
-            "time": "11:40-13:15\n",
-            "name": "Фізика (Лаб)",
+            "time": "9:50-11:25\n",
+            "name": "Українська мова за проф. спрямуванням (Практика)",
             "links": [
-            "*нет ссылки*",
-            "\nМаю надію, що в тебе стоїть годинник на 11:40"
+                "*Немає посилання*\n"
             ]
         }
     ],
