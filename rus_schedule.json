@@ -1,10 +1,19 @@
 {
     "monday": [
         {
+            "week-parity": false,
             "time": "8:00-9:35\n",
-            "name": "Выборочная дисциплина общей подготовки",
+            "name": "Социология (Лекция)",
             "links": [
-                "*Нет ссылки*\n"
+                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
+            ]
+        },
+        {
+            "week-parity": true,
+            "time": "8:00-9:35\n",
+            "name": "Социология (Практика) для группы ВД02-01",
+            "links": [
+                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
             ]
         },
         {
@@ -25,10 +34,11 @@
     ],
     "tuesday": [
         {
+            "week-parity": true,
             "time": "8:00-9:35\n",
-            "name": "Выборочная дисциплина общей подготовки",
+            "name": "Социология (Практика) для группы ВД02-02",
             "links": [
-                "*Нет ссылки*\n"
+                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
             ]
         },
         {
