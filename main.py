@@ -326,7 +326,11 @@ def answer_change_language(call):
         conn.commit()
         
         cursor.execute("""SELECT is_admin FROM subscriptions WHERE user_id == ?""", (call.message.chat.id, ))
-        is_admin = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result:
+            is_admin = result[0]
+        else:
+            is_admin = 0
         
         conn.commit()
         conn.close()
@@ -352,7 +356,11 @@ def answer_change_language(call):
         conn.commit()
         
         cursor.execute("""SELECT is_admin FROM subscriptions WHERE user_id == ?""", (call.message.chat.id, ))
-        is_admin = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result:
+            is_admin = result[0]
+        else:
+            is_admin = 0
         
         conn.commit()
         conn.close()
