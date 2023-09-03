@@ -1,7 +1,7 @@
 {
     "monday": [
         {
-            "week-parity": false,
+            "week_parity": false,
             "time": "8:00-9:35\n",
             "name": "Соціологія (Лекція)",
             "links": [
@@ -9,7 +9,7 @@
             ]
         },
         {
-            "week-parity": true,
+            "week_parity": true,
             "time": "8:00-9:35\n",
             "name": "Соціологія (Практика) для групи ВД02-01",
             "links": [
@@ -34,7 +34,7 @@
     ],
     "tuesday": [
         {
-            "week-parity": true,
+            "week_parity": true,
             "time": "8:00-9:35\n",
             "name": "Соціологія (Практика) для групи ВД02-02",
             "links": [
@@ -59,7 +59,7 @@
     ],
     "wednesday": [
         {
-            "week-parity": false,
+            "week_parity": false,
             "time": "9:50-11:25\n",
             "name": "Інструментальні засоби в IoT (Лаб)",
             "links": [
@@ -67,7 +67,7 @@
             ]
         },
         {
-            "week-parity": true,
+            "week_parity": true,
             "time": "9:50-11:25\n",
             "name": "Теорія алгоритмів (Лаб)",
             "links": [
@@ -75,7 +75,7 @@
             ]
         },
         {
-            "week-parity": true,
+            "week_parity": true,
             "time": "11:40-13:15\n",
             "name": "Теорія ймовірностей (Практика)",
             "links": [
@@ -85,7 +85,7 @@
     ],
     "thursday": [
         {
-            "week-parity": false,
+            "week_parity": false,
             "time": "8:00-9:35\n",
             "name": "Українська мова за проф. спрямуванням (Лекція)",
             "links": [
