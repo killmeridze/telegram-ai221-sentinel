@@ -100,7 +100,8 @@ def get_user_language(chat_id: int) -> str:
     cursor = conn.cursor()
 
     cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (chat_id, ))
-    language = cursor.fetchone()[0]
+    fetched = cursor.fetchone()
+    language = fetched[0] if fetched is not None else "rus"
 
     conn.commit()
     conn.close()
@@ -195,7 +196,12 @@ def subscribe(message):
     cursor = conn.cursor()
 
     cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-    subscribed = cursor.fetchone()[0]
+    result = cursor.fetchone()
+
+    if result is None:
+        subscribed = False
+    else:
+        subscribed = result[0]
 
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to subscribe')
     if subscribed:
@@ -217,7 +223,12 @@ def unsubscribe(message):
     cursor = conn.cursor()
 
     cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-    subscribed = cursor.fetchone()[0]
+    result = cursor.fetchone()
+
+    if result is None:
+        subscribed = False
+    else:
+        subscribed = result[0]
 
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to unsubscribe')
     if not subscribed:
