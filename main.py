@@ -116,9 +116,11 @@ def update_buttons(language: str, is_admin: int) -> None:
     button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
     button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
     button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
+    button_find_sticker = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(button, button_tomorrow)
     keyboard.row(button_subscribe, button_unsubscribe, button_change_language)
+    keyboard.row(button_find_sticker)
 
     if is_admin:
         button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["send_all"])
@@ -294,6 +296,43 @@ def send_all(message):
     
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{message.text}' if user_language == 'rus'
                 else f'Повідмлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
+    
+@bot.message_handler(func=lambda message: message.text in ['Найти стикер', 'Знайти стикер'], content_types=['text'])
+def get_sticker_text_to_find_sticker(message):
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
+        user_language = cursor.fetchone()[0]
+
+    msg = bot.reply_to(message, 'Введите текст со стикера' if user_language == 'rus' else 'Введіть текст зі стикера')
+    logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
+
+    bot.register_next_step_handler(msg, find_stickers)
+
+def find_stickers(message):
+    with sqlite3.connect('stickers.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT sticker_id, keyword FROM stickers""")
+        stickers = cursor.fetchall()
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
+        user_language = cursor.fetchone()[0]
+
+    result = []
+    for sticker in stickers:
+        if message.text.lower() in sticker[1].lower():
+            result.append(sticker[0])
+
+    if result:
+        for sticker in result:
+            sleep(0.5)
+            bot.send_sticker(message.chat.id, sticker)
+        logger.info(f'Sent {len(result)} stickers to user {message.from_user.username}(user_id - {message.from_user.id})')
+    else:
+        bot.reply_to(message, 'Нет стикеров с такими словами' if user_language == 'rus' else 'Нема стикерів з такими словами')
+        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker')
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
 def change_language(message):
@@ -381,5 +420,5 @@ if __name__ == '__main__':
 
     bot.polling(none_stop=True)
 
-    while thread.is_alive:                              
+    while thread.is_alive:
         thread.join(1)
