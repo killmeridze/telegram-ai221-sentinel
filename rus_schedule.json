@@ -5,35 +5,35 @@
             "time": "8:00-9:35",
             "name": "Социология (Лекция)",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0",
-                "Северинюк Т.О.\n"
-            ]
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
+            ],
+            "teachers": "Северинюк Т.О."
         },
         {
             "week_parity": true,
             "time": "8:00-9:35",
             "name": "Социология (Практика) для группы ВД02-01",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0",
-                "Северинюк Т.О."
-            ]
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
+            ],
+            "teachers": "Северинюк Т.О."
         },
         {
             "time": "9:50-11:25",
             "name": "Объектно-ориентированное программирование (Лекция)",
             "links": [
-                "bit.ly/hodovychenko_zoom",
-                "Годовиченко М.А."
-            ]
+                "bit.ly/hodovychenko_zoom"
+            ],
+            "teachers": "Годовиченко М.А."
         },
         {
             "time": "11:40-13:15",
             "name": "Теория вероятностей и мат.статистика (Лекция)",
             "links": [
                 "https://us04web.zoom.us/j/6592901524?pwd=TFpiSHhTdnpxU0FPdFNVQ3d2eU1sdz09",
-                "Пароль: xUwk87",
-                "Юрченко М.О."
-            ]
+                "Пароль: xUwk87"
+            ],
+            "teachers": "Юрченко М.О."
         }
     ],
     "tuesday": [
@@ -42,26 +42,26 @@
             "time": "8:00-9:35",
             "name": "Социология (Практика) для группы ВД02-02",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0",
-                "Северинюк Т.О."
-            ]
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
+            ],
+            "teachers": "Северинюк Т.О."
         },
         {
             "time": "9:50-11:25",
             "name": "Теория алгоритмов (Лекция)",
             "links": [
                 "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
-                "Пароль: 779285",
-                "Арсирий О.О."
-            ]
+                "Пароль: 779285"
+            ],
+            "teachers": "Арсирий О.О."
         },
         {
             "time": "11:40-13:15",
             "name": "Инструментальные средства в IoT (Лекция)",
             "links": [
-                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09",
-                "Ядрова М.В."
-            ]
+                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09"
+            ],
+            "teachers": "Ядрова М.В."
         }
     ],
     "wednesday": [
@@ -70,27 +70,27 @@
             "time": "9:50-11:25",
             "name": "Инструментальные средства в IoT (Лаб)",
             "links": [
-                "http://meet.google.com/jvx-hgjw-uef",
-                "Ядрова М.В., Костенко"
-            ]
+                "http://meet.google.com/jvx-hgjw-uef"
+            ],
+            "teachers": "Ядрова М.В., Костенко"
         },
         {
             "week_parity": true,
             "time": "9:50-11:25",
             "name": "Теория алгоритмов (Лаб)",
             "links": [
-                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
-                "Арсирий О.О., Смик С.Ю."
-            ]
+                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09"
+            ],
+            "teachers": "Арсирий О.О., Смик С.Ю."
         },
         {
             "week_parity": true,
             "time": "11:40-13:15",
             "name": "Теория вероятностей (Практика)",
             "links": [
-                "*Нет ссылки*",
-                "Соловьёва О.В."
-            ]
+                "*Нет ссылки*"
+            ],
+            "teachers": "Соловьёва О.В."
         }
     ],
     "thursday": [
@@ -99,25 +99,25 @@
             "time": "8:00-9:35",
             "name": "Украинский язык по проф. направлению (Лекция)",
             "links": [
-                "*Нет ссылки*",
-                "Лавренюк В.В."
-            ]
+                "*Нет ссылки*"
+            ],
+            "teachers": "Лавренюк В.В."
         },
         {
             "time": "9:50-11:25",
             "name": "Организация баз данных и знаний (Лекция)",
             "links": [
-                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09",
-                "Блажко А.О."
-            ]
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
+            ],
+            "teachers": "Блажко А.О."
         },
         {
             "time": "11:40-13:15",
             "name": "Организация баз данных и знаний (Лаб)",
             "links": [
-                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09",
-                "Дрозд М.О., Дрозд Ю.В."
-            ]
+                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09"
+            ],
+            "teachers": "Дрозд М.О., Дрозд Ю.В."
         }
     ],
     "friday": [
@@ -125,16 +125,17 @@
             "time": "8:00-9:35",
             "name": "Объектно-ориентированное программирование (Лаб)",
             "links": [
-                "bit.ly/hodovychenko_zoom",
-                "Годовиченко М.А"
-            ]
+                "bit.ly/hodovychenko_zoom"
+            ],
+            "teachers": "Годовиченко М.А."
         },
         {
             "time": "9:50-11:25",
             "name": "Украинский язык по проф. направлению (Практика)",
             "links": [
                 "*Нет ссылки*"
-            ]
+            ],
+            "teachers": "*Не ясно кто*"
         }
     ],
     "saturday": [],

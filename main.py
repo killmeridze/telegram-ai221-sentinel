@@ -66,7 +66,7 @@ def schedule_text(today: datetime.date, language: str) -> str:
             message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
                 message_text += f'{link}\n'
-            message_text += '\n'
+            message_text += f'{item["teachers"]}\n\n'
 
     return message_text
 
