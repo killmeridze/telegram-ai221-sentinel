@@ -2,124 +2,124 @@
     "monday": [
         {
             "week_parity": false,
-            "time": "8:00-9:35\n",
+            "time": "8:00-9:35",
             "name": "Соціологія (Лекція)",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ]
         },
         {
             "week_parity": true,
-            "time": "8:00-9:35\n",
+            "time": "8:00-9:35",
             "name": "Соціологія (Практика) для групи ВД02-01",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ]
         },
         {
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Об'єктно-орієнтоване програмування (Лекція)",
             "links": [
-                "bit.ly/hodovychenko_zoom\n"
+                "bit.ly/hodovychenko_zoom"
             ]
         },
         {
-            "time": "11:40-13:15\n",
+            "time": "11:40-13:15",
             "name": "Теорія ймовірностей та мат.статистика (Лекція)",
             "links": [
                 "https://us04web.zoom.us/j/6592901524?pwd=TFpiSHhTdnpxU0FPdFNVQ3d2eU1sdz09",
-                "Пароль: xUwk87\n"
+                "Пароль: xUwk87"
             ]
         }
     ],
     "tuesday": [
         {
             "week_parity": true,
-            "time": "8:00-9:35\n",
+            "time": "8:00-9:35",
             "name": "Соціологія (Практика) для групи ВД02-02",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0\n"
+                "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ]
         },
         {
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Теорія алгоритмів (Лекція)",
             "links": [
                 "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
-                "Пароль: 779285\n"
+                "Пароль: 779285"
             ]
         },
         {
-            "time": "11:40-13:15\n",
+            "time": "11:40-13:15",
             "name": "Інструментальні засоби в IoT (Лекція)",
             "links": [
-                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09\n"
+                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09"
             ]
         }
     ],
     "wednesday": [
         {
             "week_parity": false,
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Інструментальні засоби в IoT (Лаб)",
             "links": [
-                "http://meet.google.com/jvx-hgjw-uef\n"
+                "http://meet.google.com/jvx-hgjw-uef"
             ]
         },
         {
             "week_parity": true,
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Теорія алгоритмів (Лаб)",
             "links": [
-                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09\n"
+                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09"
             ]
         },
         {
             "week_parity": true,
-            "time": "11:40-13:15\n",
+            "time": "11:40-13:15",
             "name": "Теорія ймовірностей (Практика)",
             "links": [
-                "*Немає посилання*\n"
+                "*Немає посилання*"
             ]
         }
     ],
     "thursday": [
         {
             "week_parity": false,
-            "time": "8:00-9:35\n",
+            "time": "8:00-9:35",
             "name": "Українська мова за проф. спрямуванням (Лекція)",
             "links": [
-                "*Немає посилання*\n"
+                "*Немає посилання*"
             ]
         },
         {
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Організація баз даних та знань (Лекція)",
             "links": [
-                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09\n"
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
             ]
         },
         {
-            "time": "11:40-13:15\n",
+            "time": "11:40-13:15",
             "name": "Організація баз даних та знань (Лаб)",
             "links": [
-                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09\n"
+                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09"
             ]
         }
     ],
     "friday": [
         {
-            "time": "8:00-9:35\n",
+            "time": "8:00-9:35",
             "name": "Об'єктно-орієнтоване програмування (Лаб)",
             "links": [
-                "bit.ly/hodovychenko_zoom\n"
+                "bit.ly/hodovychenko_zoom"
             ]
         },
         {
-            "time": "9:50-11:25\n",
+            "time": "9:50-11:25",
             "name": "Українська мова за проф. спрямуванням (Практика)",
             "links": [
-                "*Немає посилання*\n"
+                "*Немає посилання*"
             ]
         }
     ],

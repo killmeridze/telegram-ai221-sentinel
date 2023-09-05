@@ -63,9 +63,10 @@ def schedule_text(today: datetime.date, language: str) -> str:
     
     for item in schedule:
         if item.get("week_parity") is None or item.get("week_parity") is week_parity:
-            message_text += f'{item["time"]}{item["name"]}:\n'
+            message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
                 message_text += f'{link}\n'
+            message_text += '\n'
 
     return message_text
 
@@ -296,13 +297,10 @@ def send_all(message):
     
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{message.text}' if user_language == 'rus'
                 else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
-    
+
 @bot.message_handler(func=lambda message: message.text in ['Найти стикеры', 'Знайти стикери'], content_types=['text'])
 def get_sticker_text_to_find_sticker(message):
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-        user_language = cursor.fetchone()[0]
+    user_language = get_user_language(message.chat.id)
 
     msg = bot.reply_to(message, 'Введите текст для поиска стикеров' if user_language == 'rus' else 'Введіть текст для пошуку стикерів')
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
@@ -315,10 +313,7 @@ def find_stickers(message):
         cursor.execute("""SELECT sticker_id, keyword FROM stickers""")
         stickers = cursor.fetchall()
 
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-        user_language = cursor.fetchone()[0]
+    user_language = get_user_language(message.chat.id)
 
     result = []
     for sticker in stickers:
