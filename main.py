@@ -295,16 +295,16 @@ def send_all(message):
         total_users += 1
     
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{message.text}' if user_language == 'rus'
-                else f'Повідмлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
+                else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
     
-@bot.message_handler(func=lambda message: message.text in ['Найти стикер', 'Знайти стикер'], content_types=['text'])
+@bot.message_handler(func=lambda message: message.text in ['Найти стикеры', 'Знайти стикери'], content_types=['text'])
 def get_sticker_text_to_find_sticker(message):
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
         user_language = cursor.fetchone()[0]
 
-    msg = bot.reply_to(message, 'Введите текст со стикера' if user_language == 'rus' else 'Введіть текст зі стикера')
+    msg = bot.reply_to(message, 'Введите текст для поиска стикеров' if user_language == 'rus' else 'Введіть текст для пошуку стикерів')
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
 
     bot.register_next_step_handler(msg, find_stickers)
@@ -322,17 +322,22 @@ def find_stickers(message):
 
     result = []
     for sticker in stickers:
-        if message.text.lower() in sticker[1].lower():
-            result.append(sticker[0])
+        try:
+            if message.text.lower() in sticker[1].lower():
+                result.append(sticker[0])
+        except AttributeError as e:
+            logger.warning(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent something that caused AttributeError: {e}')
+            bot.reply_to(message, 'Я могу обработать только текст' if user_language == 'rus' else 'Я можу обробити лише текст')
+            return
 
     if result:
         for sticker in result:
             sleep(0.5)
             bot.send_sticker(message.chat.id, sticker)
-        logger.info(f'Sent {len(result)} stickers to user {message.from_user.username}(user_id - {message.from_user.id})')
+        logger.info(f'Sent {len(result)} stickers to user {message.from_user.username}(user_id - {message.from_user.id}). Searching text was {message.text}')
     else:
-        bot.reply_to(message, 'Нет стикеров с такими словами' if user_language == 'rus' else 'Нема стикерів з такими словами')
-        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker')
+        bot.reply_to(message, 'Нет стикеров с таким текстом' if user_language == 'rus' else 'Нема стикерів з таким текстом')
+        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
 def change_language(message):
