@@ -9,8 +9,8 @@ import settings
 from loguru import logger
 from dotenv import load_dotenv
 import os
-
-
+import requests
+from telebot.apihelper import ApiTelegramException
 
 logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}', level='DEBUG', rotation='10 MB', compression='zip')
 
@@ -375,7 +375,19 @@ def answer_change_language(call):
 
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
+def start_bot_polling():
+    RETRY_DELAY = 10
+    while True:
+        try:
+            bot.polling(none_stop=True)
+            break
+        except (requests.exceptions.ReadTimeout, ApiTelegramException) as e:
+            if isinstance(e, ApiTelegramException) and e.error_code == 502:
+                print("Ошибка 502: Bad Gateway. Повторная попытка...")
+            elif isinstance(e, requests.exceptions.ReadTimeout):
+                print("Ошибка таймаута. Повторная попытка...")
 
+            sleep(RETRY_DELAY)
 
 if __name__ == '__main__':
     sc.every().monday.at('07:00').do(send_schedule)
@@ -387,7 +399,7 @@ if __name__ == '__main__':
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
 
-    bot.polling(none_stop=True)
+    start_bot_polling()
 
     while thread.is_alive:                              
         thread.join(1)
