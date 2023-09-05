@@ -63,9 +63,10 @@ def schedule_text(today: datetime.date, language: str) -> str:
     
     for item in schedule:
         if item.get("week_parity") is None or item.get("week_parity") is week_parity:
-            message_text += f'{item["time"]}{item["name"]}:\n'
+            message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
                 message_text += f'{link}\n'
+            message_text += '\n'
 
     return message_text
 
@@ -116,9 +117,11 @@ def update_buttons(language: str, is_admin: int) -> None:
     button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
     button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
     button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
+    button_find_sticker = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(button, button_tomorrow)
     keyboard.row(button_subscribe, button_unsubscribe, button_change_language)
+    keyboard.row(button_find_sticker)
 
     if is_admin:
         button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["send_all"])
@@ -293,7 +296,43 @@ def send_all(message):
         total_users += 1
     
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{message.text}' if user_language == 'rus'
-                else f'Повідмлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
+                else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
+
+@bot.message_handler(func=lambda message: message.text in ['Найти стикеры', 'Знайти стикери'], content_types=['text'])
+def get_sticker_text_to_find_sticker(message):
+    user_language = get_user_language(message.chat.id)
+
+    msg = bot.reply_to(message, 'Введите текст для поиска стикеров' if user_language == 'rus' else 'Введіть текст для пошуку стикерів')
+    logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
+
+    bot.register_next_step_handler(msg, find_stickers)
+
+def find_stickers(message):
+    with sqlite3.connect('stickers.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT sticker_id, keyword FROM stickers""")
+        stickers = cursor.fetchall()
+
+    user_language = get_user_language(message.chat.id)
+
+    result = []
+    for sticker in stickers:
+        try:
+            if message.text.lower() in sticker[1].lower():
+                result.append(sticker[0])
+        except AttributeError as e:
+            logger.warning(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent something that caused AttributeError: {e}')
+            bot.reply_to(message, 'Я могу обработать только текст' if user_language == 'rus' else 'Я можу обробити лише текст')
+            return
+
+    if result:
+        for sticker in result:
+            sleep(0.5)
+            bot.send_sticker(message.chat.id, sticker)
+        logger.info(f'Sent {len(result)} stickers to user {message.from_user.username}(user_id - {message.from_user.id}). Searching text was {message.text}')
+    else:
+        bot.reply_to(message, 'Нет стикеров с таким текстом' if user_language == 'rus' else 'Нема стикерів з таким текстом')
+        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
 
 @bot.message_handler(func=lambda message: message.text in ['Поменять язык', 'Змінити мову'], content_types=['text'])
 def change_language(message):
@@ -401,5 +440,5 @@ if __name__ == '__main__':
 
     start_bot_polling()
 
-    while thread.is_alive:                              
+    while thread.is_alive:
         thread.join(1)
