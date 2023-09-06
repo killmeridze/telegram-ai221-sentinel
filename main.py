@@ -109,27 +109,75 @@ def get_user_language(chat_id: int) -> str:
 
     return language
 
-def update_buttons(language: str, is_admin: int) -> None:
-    '''Функция для обновления кнопок в соответствии с языком пользователя'''
+# def update_buttons(language: str, is_admin: int) -> None:
+#     '''Функция для обновления кнопок в соответствии с языком пользователя'''
 
-    button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule"])
-    button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule_tomorrow"])
-    button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
-    button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
-    button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
-    button_find_sticker = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
-    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.row(button, button_tomorrow)
-    keyboard.row(button_subscribe, button_unsubscribe, button_change_language)
-    keyboard.row(button_find_sticker)
+#     button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule"])
+#     button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule_tomorrow"])
+#     button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
+#     button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
+#     button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
+#     button_find_sticker = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
+#     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+#     keyboard.row(button, button_tomorrow)
+#     keyboard.row(button_subscribe, button_unsubscribe, button_change_language)
+#     keyboard.row(button_find_sticker)
 
-    if is_admin:
-        button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["send_all"])
-        keyboard.row(button_send_all)
+#     if is_admin:
+#         button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["send_all"])
+#         keyboard.row(button_send_all)
+
+#     return keyboard
+
+def update_buttons(language: str, is_admin = None, mode='main') -> None:
+    '''Функция для обновления кнопок в соответствии с языком пользователя и выбранным режимом.'''
+
+    # Главное меню
+    if mode == 'main':
+        button = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule"])
+        button_tomorrow = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["schedule_tomorrow"])
+        button_subscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
+        button_unsubscribe = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
+        button_find_sticker = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
+        button_settings = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["settings"])
+        
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.row(button, button_tomorrow)
+        keyboard.row(button_subscribe, button_unsubscribe)
+        keyboard.row(button_find_sticker, button_settings)
+
+        if is_admin:
+            button_send_all = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["send_all"])
+            keyboard.row(button_send_all)
+    
+    # Меню настроек
+    elif mode == 'settings':
+        button_change_language = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
+        button_change_group = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["change_group"])
+        button_return = telebot.types.KeyboardButton(BUTTON_TEXTS[language]["return"])
+
+        keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.row(button_change_language, button_change_group)
+        keyboard.row(button_return)
 
     return keyboard
 
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['settings'])
+def show_settings(message):
+    user_language = get_user_language(message.chat.id)
+    prompt_text = "Выберите действие:" if user_language == "rus" else "Оберіть дію:"
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='settings'))
 
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['return'])
+def return_to_main(message):
+    user_language = get_user_language(message.chat.id)
+    prompt_text = "Что делать дальше? Выбор за тобой, сливка" if user_language == "rus" else "Що робити далi? Вибiр за тобою, слiвка"
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='main'))
+
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_group'])
+def change_group(message):
+    user_language = get_user_language(message.chat.id)
+    bot.send_message(message.chat.id, "sosi", reply_markup=update_buttons(user_language, mode='main'))
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -147,12 +195,13 @@ def start(message):
     conn = sqlite3.connect('subscriptions.db')
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS subscriptions
-                (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT,
-                user_id INTEGER NOT NULL,
-                subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
-                language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')),
-                is_admin INTEGER NOT NULL CHECK (is_admin IN (0, 1)))""")
+                    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT,
+                    user_id INTEGER NOT NULL,
+                    subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
+                    language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')),
+                    is_admin INTEGER NOT NULL CHECK (is_admin IN (0, 1)),
+                    user_group INTEGER DEFAULT 1 CHECK (user_group IN (1, 2)))""")
 
     cursor.execute("""SELECT * FROM subscriptions WHERE user_id == ?""", (user_id, ))
     existing_user = cursor.fetchone()
