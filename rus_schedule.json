@@ -7,7 +7,7 @@
             "links": [
                 "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ],
-            "teachers": "Северинюк Т.О."
+            "teachers": "Северинюк Т.А."
         },
         {
             "week_parity": true,
@@ -16,7 +16,7 @@
             "links": [
                 "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ],
-            "teachers": "Северинюк Т.О."
+            "teachers": "Северинюк Т.А."
         },
         {
             "time": "9:50-11:25",
@@ -24,7 +24,7 @@
             "links": [
                 "bit.ly/hodovychenko_zoom"
             ],
-            "teachers": "Годовиченко М.А."
+            "teachers": "Годовиченко Н.А."
         },
         {
             "time": "11:40-13:15",
@@ -33,7 +33,7 @@
                 "https://us04web.zoom.us/j/6592901524?pwd=TFpiSHhTdnpxU0FPdFNVQ3d2eU1sdz09",
                 "Пароль: xUwk87"
             ],
-            "teachers": "Юрченко М.О."
+            "teachers": "Юрченко М.А."
         }
     ],
     "tuesday": [
@@ -44,7 +44,7 @@
             "links": [
                 "https://meet.google.com/nte-kopn-dzm?authuser=0"
             ],
-            "teachers": "Северинюк Т.О."
+            "teachers": "Северинюк Т.А."
         },
         {
             "time": "9:50-11:25",
@@ -53,7 +53,7 @@
                 "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
                 "Пароль: 779285"
             ],
-            "teachers": "Арсирий О.О."
+            "teachers": "Арсирий Е.А."
         },
         {
             "time": "11:40-13:15",
@@ -72,7 +72,7 @@
             "links": [
                 "http://meet.google.com/jvx-hgjw-uef"
             ],
-            "teachers": "Ядрова М.В., Костенко"
+            "teachers": "Ядрова М.В., Костенко В.Л."
         },
         {
             "week_parity": true,
@@ -81,7 +81,7 @@
             "links": [
                 "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09"
             ],
-            "teachers": "Арсирий О.О., Смик С.Ю."
+            "teachers": "Арсирий Е.А., Смык С.Ю."
         },
         {
             "week_parity": true,
@@ -99,7 +99,7 @@
             "time": "8:00-9:35",
             "name": "Украинский язык по проф. направлению (Лекция)",
             "links": [
-                "*Нет ссылки*"
+                "https://meet.google.com/okm-kdaa-xfu?authuser=2"
             ],
             "teachers": "Лавренюк В.В."
         },
@@ -109,15 +109,15 @@
             "links": [
                 "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
             ],
-            "teachers": "Блажко А.О."
+            "teachers": "Блажко А.А."
         },
         {
             "time": "11:40-13:15",
             "name": "Организация баз данных и знаний (Лаб)",
             "links": [
-                "https://zoom.us/j/4951329852?pwd=eEtLNmRCUnpiY2ZUNGdFK1JqSkJWdz09"
+                "https://us05web.zoom.us/j/5324030015?pwd=czMvN2pwbnlQK1gvNFFMZXE4L2lyUT09"
             ],
-            "teachers": "Дрозд М.О., Дрозд Ю.В."
+            "teachers": "Дрозд М.А."
         }
     ],
     "friday": [
@@ -127,15 +127,15 @@
             "links": [
                 "bit.ly/hodovychenko_zoom"
             ],
-            "teachers": "Годовиченко М.А."
+            "teachers": "Годовиченко Н.А."
         },
         {
             "time": "9:50-11:25",
             "name": "Украинский язык по проф. направлению (Практика)",
             "links": [
-                "*Нет ссылки*"
+                "https://meet.google.com/uzc-ktfm-tdy?authuser=2"
             ],
-            "teachers": "*Не ясно кто*"
+            "teachers": "Маси Н.И."
         }
     ],
     "saturday": [],
