@@ -284,7 +284,21 @@ def unsubscribe(message):
         bot.reply_to(message, 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!')
         logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed')
 
-@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['send_all'])
+def get_content_description(message):
+    if message.content_type == 'text':
+        return f'text "{message.text}"'
+    elif message.content_type == 'photo':
+        return 'a photo'
+    elif message.content_type == 'sticker':
+        return 'a sticker'
+    elif message.content_type == 'animation':
+        return 'an animation'
+    elif message.content_type == 'voice':
+        return 'a voice message'
+    else:
+        return 'an unknown content'
+
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['send_all', 'photo', 'sticker', 'animation', 'voice'])
 def get_text_to_send_all(message):
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
@@ -317,15 +331,29 @@ def send_all(message):
         if user_id[0] == message.chat.id:
             continue
         try:
-            bot.send_message(user_id[0], message.text)
-            logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) sent "{message.text}" to {user_id[0]} via send all command')
+            if message.content_type == 'text':
+                bot.send_message(user_id[0], message.text)
+            elif message.content_type == 'photo':
+                photo_id = message.photo[-1].file_id 
+                bot.send_photo(user_id[0], photo_id)
+            elif message.content_type == 'sticker':
+                sticker_id = message.sticker.file_id
+                bot.send_sticker(user_id[0], sticker_id)
+            elif message.content_type == 'animation':
+                animation_id = message.animation.file_id
+                bot.send_animation(user_id[0], animation_id)
+            elif message.content_type == 'voice':
+                voice_id = message.voice.file_id
+                bot.send_voice(user_id[0], voice_id)
+            content_description = get_content_description(message)
+            logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) sent {content_description} to {user_id[0]} via send all command')
             successful_sends += 1
         except telebot.apihelper.ApiException as e:
             logger.warning(f'Failed to send a message to user with user_id - {user_id[0]}: {e}')
         total_users += 1
-    
-    bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{message.text}' if user_language == 'rus'
-                else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{message.text}')
+    bot_reply_content = content_description if message.content_type != 'text' else f'Сообщение:\n{message.text}'
+    bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{bot_reply_content}' if user_language == 'rus'
+                else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{bot_reply_content}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['find_sticker'])
 def get_text_to_find_stickers(message):
@@ -351,7 +379,7 @@ def find_stickers(message):
                 result.append(sticker[0])
         except AttributeError as e:
             logger.warning(f'User {message.from_user.username}(user_id - {message.from_user.id}) sent something that caused AttributeError: {e}')
-            bot.reply_to(message, 'Я могу обработать только текст' if user_language == 'rus' else 'Я можу обробити лише текст')
+            bot.send_sticker(message.chat.id, 'CAACAgIAAxUAAWT0z6Md0UVZkLHqaVvFesY_3q66AAJoIAAC4SO4SjsRfJMSVWi6MAQ')
             return
 
     if result:
