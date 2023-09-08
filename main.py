@@ -298,7 +298,7 @@ def get_content_description(message):
     else:
         return 'an unknown content'
 
-@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['send_all', 'photo', 'sticker', 'animation', 'voice'])
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['send_all'], content_types=['text', 'photo', 'sticker', 'animation', 'voice'])
 def get_text_to_send_all(message):
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
