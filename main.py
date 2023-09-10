@@ -472,7 +472,11 @@ def answer_change_group(call):
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
 def start_bot_polling():
-    RETRY_DELAY = 10
+    RETRY_DELAY_BASE = 2  # Начальная задержка
+    MAX_RETRY_DELAY = 600  # Максимальная задержка в секундах (10 минут)
+    
+    retry_delay = RETRY_DELAY_BASE  # Начальное значение задержки
+    
     while True:
         try:
             bot.polling(none_stop=True)
@@ -482,8 +486,10 @@ def start_bot_polling():
                 print("Ошибка 502: Bad Gateway. Повторная попытка...")
             elif isinstance(e, requests.exceptions.ReadTimeout):
                 print("Ошибка таймаута. Повторная попытка...")
-
-            sleep(RETRY_DELAY)
+            
+            sleep(retry_delay)
+            
+            retry_delay = min(retry_delay * 2, MAX_RETRY_DELAY)
 
 if __name__ == '__main__':
     sc.every().monday.at('07:00').do(send_schedule)
