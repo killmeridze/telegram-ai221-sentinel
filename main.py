@@ -64,7 +64,7 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
         week_parity = True
     
     for item in schedule:
-        if item.get("week_parity") is None or item.get("week_parity") is week_parity and item.get("group") is None or item.get("group") is group:
+        if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
             message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
                 message_text += f'{link}\n'
