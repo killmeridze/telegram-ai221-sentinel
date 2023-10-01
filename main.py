@@ -481,14 +481,16 @@ def start_bot_polling():
         try:
             bot.polling(none_stop=True)
             break
-        except (requests.exceptions.ReadTimeout, ApiTelegramException) as e:
+        except (requests.exceptions.ReadTimeout, ApiTelegramException, requests.exceptions.ConnectionError) as e:
             if isinstance(e, ApiTelegramException) and e.error_code == 502:
-                print("Ошибка 502: Bad Gateway. Повторная попытка...")
+                error_message = "Ошибка 502: Bad Gateway. Повторная попытка..."
             elif isinstance(e, requests.exceptions.ReadTimeout):
-                print("Ошибка таймаута. Повторная попытка...")
+                error_message = "Ошибка таймаута. Повторная попытка..."
             elif isinstance(e, requests.exceptions.ConnectionError):
-                print("Ошибка соединения. Повторная попытка...")
-            
+                error_message = "Ошибка соединения. Повторная попытка..."
+
+            print(error_message)
+
             sleep(retry_delay)
             
             retry_delay = min(retry_delay * 2, MAX_RETRY_DELAY)
