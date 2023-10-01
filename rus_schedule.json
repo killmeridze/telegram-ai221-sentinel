@@ -68,6 +68,16 @@
     ],
     "wednesday": [
         {
+            "week_parity": true,
+            "time": "8:00-9:35",
+            "name": "Теория вероятностей (Практика)",
+            "links": [
+                "https://us04web.zoom.us/j/8896730967?pwd=SVpUTitWdnRob2ZpNUZOVVpZam5VZz09",
+                "Пароль: 0VJJ9D"
+            ],
+            "teachers": "Соловьёва О.В."
+        },
+        {
             "week_parity": false,
             "time": "9:50-11:25",
             "name": "Инструментальные средства в IoT (Лаб)",
@@ -84,15 +94,6 @@
                 "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09"
             ],
             "teachers": "Арсирий Е.А., Смык С.Ю."
-        },
-        {
-            "week_parity": true,
-            "time": "11:40-13:15",
-            "name": "Теория вероятностей (Практика)",
-            "links": [
-                "*Нет ссылки*"
-            ],
-            "teachers": "Соловьёва О.В."
         }
     ],
     "thursday": [
@@ -140,6 +141,10 @@
             "teachers": "Маси Н.И."
         }
     ],
-    "saturday": [],
+    "saturday": [
+        {
+            "schedule-day": 6
+        }
+    ],
     "sunday": []
 }
