@@ -6,7 +6,7 @@ weekday_name_ru_dict = {
     "wednesday": "Среду",
     "thursday": "Четверг",
     "friday": "Пятницу",
-    "saturday": "Суббота",
+    "saturday": "Субботу",
     "sunday": "Воскресенье"
 }
 
@@ -16,6 +16,6 @@ weekday_name_uk_dict = {
     "wednesday": "Середу",
     "thursday": "Четвер",
     "friday": "П'ятницю",
-    "saturday": "Субота",
+    "saturday": "Суботу",
     "sunday": "Неділя"
 }

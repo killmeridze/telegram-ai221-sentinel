@@ -53,14 +53,25 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
 
         message_text = f'Розклад на {day_name_uk}:\n\n'
 
-    # Проверка на чётность/нечётность False - нечётная, True - чётная
-    current_week_number = today.isocalendar()[1]
-    week_parity = False
-    if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
+    if day_name_en != 'saturday':
+        # Проверка на чётность/нечётность. False - нечётная, True - чётная
+        current_week_number = today.isocalendar()[1]
         week_parity = False
+        if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
+            week_parity = False
+        else:
+            week_parity = True
     else:
-        week_parity = True
-    
+        day_names = [None, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+
+        schedule_day = schedule[0].get('schedule-day', 0)
+
+        day = schedule_day % 5 + 1
+        week_parity = ((schedule_day // 5) + 1) % 2 == 0
+
+        with open(schedule_file, 'r', encoding='utf-8') as file:
+            schedule = json.load(file).get(day_names[day])
+
     for item in schedule:
         if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
             message_text += f'{item["time"]}\n{item["name"]}:\n'
@@ -87,7 +98,18 @@ def send_schedule() -> None:
             logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
         except telebot.apihelper.ApiException as e:
             logger.warning(f'Failed to send a schedule to user with user_id - {subscriber[0]}: {e}')
-        sleep(1)
+            sleep(1)
+
+    if today.strftime("%A").lower() == 'saturday':
+        schedule_files = ['rus_schedule.json', 'ukr_schedule.json']
+        for schedule_file in schedule_files:
+            with open(schedule_file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+
+            data['saturday'][0]['schedule-day'] += 1
+
+            with open(schedule_file, 'w', encoding='utf-8') as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
 
 def get_user_language(chat_id: int) -> str:
     '''Функция для получения языка пользователя'''
@@ -214,6 +236,7 @@ def schedule(message):
     today = datetime.date.today()
     user_language = get_user_language(message.chat.id)
     user_group = get_user_group(message.chat.id)
+
     message_text = schedule_text(today, user_language, user_group)
 
     bot.send_message(chat_id=message.chat.id, text=message_text)
@@ -501,6 +524,7 @@ if __name__ == '__main__':
     sc.every().wednesday.at('07:00').do(send_schedule)
     sc.every().thursday.at('07:00').do(send_schedule)
     sc.every().friday.at('07:00').do(send_schedule)
+    sc.every().saturday.at('07:00').do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
