@@ -19,3 +19,5 @@ weekday_name_uk_dict = {
     "saturday": "Суботу",
     "sunday": "Неділя"
 }
+
+day_names = [None, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']

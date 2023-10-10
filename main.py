@@ -56,21 +56,15 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
     if day_name_en != 'saturday':
         # Проверка на чётность/нечётность. False - нечётная, True - чётная
         current_week_number = today.isocalendar()[1]
-        week_parity = False
-        if (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 == 0:
-            week_parity = False
-        else:
-            week_parity = True
+        week_parity = (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 != 0
     else:
-        day_names = [None, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']
-
         schedule_day = schedule[0].get('schedule-day', 0)
 
         day = schedule_day % 5 + 1
         week_parity = ((schedule_day // 5) + 1) % 2 == 0
 
         with open(schedule_file, 'r', encoding='utf-8') as file:
-            schedule = json.load(file).get(day_names[day])
+            schedule = json.load(file).get(settings.day_names[day])
 
     for item in schedule:
         if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
@@ -100,7 +94,7 @@ def send_schedule() -> None:
             logger.warning(f'Failed to send a schedule to user with user_id - {subscriber[0]}: {e}')
             sleep(1)
 
-    if today.strftime("%A").lower() == 'saturday':
+    if today.strftime("%A").lower() == 'tuesday':
         schedule_files = ['rus_schedule.json', 'ukr_schedule.json']
         for schedule_file in schedule_files:
             with open(schedule_file, 'r', encoding='utf-8') as file:
