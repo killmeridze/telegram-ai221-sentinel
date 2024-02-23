@@ -1,16 +1,18 @@
-import telebot
-import datetime
-from time import sleep
-import json
-import sqlite3
-from threading import Thread
-import schedule as sc
-import settings
-from loguru import logger
-from dotenv import load_dotenv
-import os
-import requests
 from telebot.apihelper import ApiTelegramException
+from dotenv import load_dotenv
+from threading import Thread
+from loguru import logger
+from time import sleep
+import schedule as sc
+from utils import *
+import datetime
+import settings
+import requests
+import telebot
+import sqlite3
+import quotes
+import json
+import os
 
 logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}', level='DEBUG', rotation='10 MB', compression='zip')
 
@@ -88,7 +90,9 @@ def send_schedule() -> None:
     for subscriber in subscribers:
         try:
             message_text = schedule_text(today, subscriber[1], subscriber[2])
-            bot.send_message(chat_id=subscriber[0], text=message_text)
+            message_text += f"\n>{quotes.get_random_quote('Inspirational', get_user_language(subscriber[0])[:-1])}**"
+            message_text = escape_chars(['_', '(', ')', '~', '`', '#', '+', '-', '=', '|', '{', '}', '.', '!'], message_text)
+            bot.send_message(chat_id=subscriber[0], text=message_text, parse_mode="MarkdownV2")
             logger.info(f'Sent schedule to user_id - {subscriber[0]} via autosending')
         except telebot.apihelper.ApiException as e:
             logger.warning(f'Failed to send a schedule to user with user_id - {subscriber[0]}: {e}')
@@ -105,32 +109,32 @@ def send_schedule() -> None:
             with open(schedule_file, 'w', encoding='utf-8') as file:
                 json.dump(data, file, ensure_ascii=False, indent=4)
 
-def get_user_language(chat_id: int) -> str:
-    '''Функция для получения языка пользователя'''
+# def get_user_language(chat_id: int) -> str:
+#     '''Функция для получения языка пользователя'''
 
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (chat_id, ))
-        fetched = cursor.fetchone()
+#     with sqlite3.connect('subscriptions.db') as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (chat_id, ))
+#         fetched = cursor.fetchone()
     
-    language = fetched[0] if fetched is not None else "rus"
+#     language = fetched[0] if fetched is not None else "rus"
 
-    conn.commit()
-    conn.close()
+#     conn.commit()
+#     conn.close()
 
-    return language
+#     return language
 
-def get_user_group(chat_id: int) -> str:
-    '''Функция для получения группы пользователя'''
+# def get_user_group(chat_id: int) -> str:
+#     '''Функция для получения группы пользователя'''
 
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT user_group FROM subscriptions WHERE user_id == ?""", (chat_id, ))
-        fetched = cursor.fetchone()
+#     with sqlite3.connect('subscriptions.db') as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("""SELECT user_group FROM subscriptions WHERE user_id == ?""", (chat_id, ))
+#         fetched = cursor.fetchone()
 
-    group = fetched[0] if fetched is not None else 1
+#     group = fetched[0] if fetched is not None else 1
 
-    return group
+#     return group
 
 def update_buttons(language: str, is_admin = None, mode='main') -> None:
     '''Функция для обновления кнопок в соответствии с языком пользователя и выбранным режимом.'''
@@ -513,12 +517,13 @@ def start_bot_polling():
             retry_delay = min(retry_delay * 2, MAX_RETRY_DELAY)
 
 if __name__ == '__main__':
-    sc.every().monday.at('07:00').do(send_schedule)
-    sc.every().tuesday.at('07:00').do(send_schedule)
-    sc.every().wednesday.at('07:00').do(send_schedule)
-    sc.every().thursday.at('07:00').do(send_schedule)
-    sc.every().friday.at('07:00').do(send_schedule)
-    sc.every().saturday.at('07:00').do(send_schedule)
+    # sc.every().monday.at('07:00').do(send_schedule)
+    # sc.every().tuesday.at('07:00').do(send_schedule)
+    # sc.every().wednesday.at('07:00').do(send_schedule)
+    # sc.every().thursday.at('07:00').do(send_schedule)
+    # sc.every().friday.at('07:00').do(send_schedule)
+    # sc.every().saturday.at('07:00').do(send_schedule)
+    sc.every().second.do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
