@@ -1,4 +1,4 @@
-FIRST_WEEK_NUMBER = 36
+FIRST_WEEK_NUMBER = 36 # todo перед запуском бота заменить на 10!!!!
 
 weekday_name_ru_dict = {
     "monday": "Понедельник",
