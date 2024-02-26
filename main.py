@@ -80,15 +80,15 @@ def send_schedule() -> None:
 
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("""SELECT user_id, language, user_group FROM subscriptions WHERE subscribed == 1""") # todo: добавить селект получения подписки на цитаты
+        cursor.execute("""SELECT user_id, language, user_group, quotes_subscribed FROM subscriptions WHERE subscribed == 1""")
         subscribers = cursor.fetchall()
 
     for subscriber in subscribers:
         try:
             message_text = schedule_text(today, subscriber[1], subscriber[2])
 
-            # if subscriber[3]: # тут будет флаг получения цитаты
-            message_text += f"\n>{quotes.get_random_quote(get_user_quote_tag(subscriber[0]), subscriber[1][:-1])}**"
+            if subscriber[3]:
+                message_text += f"\n>{quotes.get_random_quote(get_user_quote_tag(subscriber[0]), subscriber[1][:-1])}**"
             
             message_text = escape_chars(message_text)
 
