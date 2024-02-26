@@ -478,13 +478,26 @@ def get_quote_tag_from_user(message : types.Message):
     user_language = get_user_language(message.chat.id)
 
     msg = bot.reply_to(message, ('Введите тему цитаты из списка ниже:\n' if user_language == 'rus' else 'Введіть тему цитати зі списку нижче:\n') + quote_tags_by_letters())
-    # logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
+    logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to change quote tag')
 
     bot.register_next_step_handler(msg, proccess_tag)
 
 def proccess_tag(message : types.Message):
-    bot.reply_to(message, 'абоба')
-    # logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
+    user_language = get_user_language(message.chat.id)
+    tag = message.text
+
+    if tag not in settings.quote_tags:
+        bot.reply_to(message, 'Такой темы нет в списке' if user_language == 'rus' else 'Такої теми немає у списку')
+        logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) entered wrong tag - {tag}')
+        return
+    
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""UPDATE subscriptions SET quote_tag = ? WHERE user_id = ?""", (tag, message.chat.id, ))
+        conn.commit()
+
+    bot.reply_to(message, 'Тема цитат изменена' if user_language == 'rus' else 'Тему цитат змінено')
+    logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) changed quote tag to {tag}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_language'])
 def change_language(message : types.Message):
