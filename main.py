@@ -195,7 +195,6 @@ def return_to_settings(message: types.Message):
     prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='settings'))
 
-
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["configure_quote"])
 def handle_configure_quote(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -438,6 +437,19 @@ def find_stickers(message : types.Message):
     else:
         bot.reply_to(message, 'Нет стикеров с таким текстом' if user_language == 'rus' else 'Нема стикерів з таким текстом')
         logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
+
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_quote_theme'])
+def get_quote_tag_from_user(message : types.Message):
+    user_language = get_user_language(message.chat.id)
+
+    msg = bot.reply_to(message, ('Введите тему цитаты из списка ниже:\n' if user_language == 'rus' else 'Введіть тему цитати зі списку нижче:\n') + quote_tags_by_letters())
+    # logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
+
+    bot.register_next_step_handler(msg, proccess_tag)
+
+def proccess_tag(message : types.Message):
+    bot.reply_to(message, 'абоба')
+    # logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_language'])
 def change_language(message : types.Message):
