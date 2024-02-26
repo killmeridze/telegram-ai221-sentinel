@@ -26,7 +26,15 @@ def get_user_group(chat_id: int) -> str:
 
 def get_user_quote_tag(chat_id: int) -> str:
     '''Функция для получения тэга цитаты пользователя'''
-    return "Inspirational" # Заглушка пока
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT quote_tag FROM subscriptions WHERE user_id == ?""", (chat_id, ))
+        fetched = cursor.fetchone()
+
+    tag = fetched[0] if fetched is not None else 'Success'
+
+    return tag
 
 def escape_chars(text: str) -> str:
     '''Функция для экранирования символов в text'''
