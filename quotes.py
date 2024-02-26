@@ -25,10 +25,10 @@ def get_random_quote(tag: str, lang: str) -> str | None:
         if (translation_response.ok):
             quote = translation_response.json()["responseData"]["translatedText"]
         else:
-            logger.error(f"Translation api error: {translation_response.status_code}")
-            return
+            logger.error(f"Translation API Error: {translation_response.status_code}")
+            return f'{text} © {author}'
     else:
-        logger.error(f"Quotes api error: {response.status_code}")
+        logger.error(f"Quotes API Error: {response.status_code}")
         return
 
     return quote
