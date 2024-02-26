@@ -136,21 +136,29 @@ def send_schedule() -> None:
 
 #     return group
 
-def update_buttons(language: str, is_admin : bool | None = None, mode : str = 'main') -> None:
+def update_buttons(language: str, user_id: int, is_admin : bool | None = None, mode : str = 'main') -> types.ReplyKeyboardMarkup:
     '''Функция для обновления кнопок в соответствии с языком пользователя и выбранным режимом.'''
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (user_id, ))
+        fetched = cursor.fetchone()
+        subscribed = fetched[0] if fetched else False
 
     # Главное меню
     if mode == 'main':
         button = types.KeyboardButton(BUTTON_TEXTS[language]["schedule"])
         button_tomorrow = types.KeyboardButton(BUTTON_TEXTS[language]["schedule_tomorrow"])
-        button_subscribe = types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
-        button_unsubscribe = types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
+        button_subscribe_unsubscribe = types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"] if subscribed else BUTTON_TEXTS[language]["subscribe"])
+        # button_subscribe = types.KeyboardButton(BUTTON_TEXTS[language]["subscribe"])
+        # button_unsubscribe = types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe"])
         button_find_sticker = types.KeyboardButton(BUTTON_TEXTS[language]["find_sticker"])
         button_settings = types.KeyboardButton(BUTTON_TEXTS[language]["settings"])
         
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.row(button, button_tomorrow)
-        keyboard.row(button_subscribe, button_unsubscribe)
+        keyboard.row(button_subscribe_unsubscribe)
+        # keyboard.row(button_subscribe, button_unsubscribe)
         keyboard.row(button_find_sticker, button_settings)
 
         if is_admin:
@@ -175,7 +183,7 @@ def update_buttons(language: str, is_admin : bool | None = None, mode : str = 'm
 def show_settings(message : types.Message):
     user_language = get_user_language(message.chat.id)
     prompt_text = 'Выберите действие:' if user_language == 'rus' else 'Оберіть дію:'
-    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='settings'))
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='settings'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['return'])
 def return_to_main(message : types.Message):
@@ -277,59 +285,86 @@ def schedule_tomorrow(message : types.Message):
     bot.send_message(chat_id=message.chat.id, text=message_text)
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
-@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'])
-def subscribe(message : types.Message):
-    user_language = get_user_language(message.chat.id)
+# @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'])
+# def subscribe(message : types.Message):
+#     user_language = get_user_language(message.chat.id)
 
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-        fetched = cursor.fetchone()
+#     with sqlite3.connect('subscriptions.db') as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
+#         fetched = cursor.fetchone()
 
-    if fetched is None:
-        subscribed = False
-    else:
-        subscribed = fetched[0]
+#     if fetched is None:
+#         subscribed = False
+#     else:
+#         subscribed = fetched[0]
 
-    logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to subscribe')
-    if subscribed:
-        bot.reply_to(message, 'Вы уже подписаны на рассылку!' if user_language == 'rus' else 'Ви вже підписані на розсилку!')
-        logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has been already subscribed")
-    else:
-        with sqlite3.connect('subscriptions.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute("""UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?""", (message.chat.id, ))
-            conn.commit()
+#     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to subscribe')
+#     if subscribed:
+#         bot.reply_to(message, 'Вы уже подписаны на рассылку!' if user_language == 'rus' else 'Ви вже підписані на розсилку!')
+#         logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has been already subscribed")
+#     else:
+#         with sqlite3.connect('subscriptions.db') as conn:
+#             cursor = conn.cursor()
+#             cursor.execute("""UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?""", (message.chat.id, ))
+#             conn.commit()
 
-        bot.reply_to(message, 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!')
-        logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed')
+#         bot.reply_to(message, 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!')
+#         logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed')
 
-@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe'])
-def unsubscribe(message : types.Message):
-    user_language = get_user_language(message.chat.id)
+# @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe'])
+# def unsubscribe(message : types.Message):
+#     user_language = get_user_language(message.chat.id)
 
-    with sqlite3.connect('subscriptions.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
-        fetched = cursor.fetchone()
+#     with sqlite3.connect('subscriptions.db') as conn:
+#         cursor = conn.cursor()
+#         cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
+#         fetched = cursor.fetchone()
 
-    if fetched is None:
-        subscribed = False
-    else:
-        subscribed = fetched[0]
+#     if fetched is None:
+#         subscribed = False
+#     else:
+#         subscribed = fetched[0]
 
-    logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to unsubscribe')
-    if not subscribed:
-        bot.reply_to(message, 'Вы не подписаны на рассылку!' if user_language == 'rus' else 'Ви не підписані на розсилку!')
-        logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has been already unsubscribed')
-    else:
-        with sqlite3.connect('subscriptions.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute("""UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?""", (message.chat.id, ))
-            conn.commit()
+#     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to unsubscribe')
+#     if not subscribed:
+#         bot.reply_to(message, 'Вы не подписаны на рассылку!' if user_language == 'rus' else 'Ви не підписані на розсилку!')
+#         logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has been already unsubscribed')
+#     else:
+#         with sqlite3.connect('subscriptions.db') as conn:
+#             cursor = conn.cursor()
+#             cursor.execute("""UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?""", (message.chat.id, ))
+#             conn.commit()
         
-        bot.reply_to(message, 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!')
-        logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed')
+#         bot.reply_to(message, 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!')
+#         logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed')
+    
+@bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe']])
+def subscribe_unsubscribe_handler(message: types.Message):
+    user_language = get_user_language(message.chat.id)
+    user_id = message.chat.id
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (user_id, ))
+        fetched = cursor.fetchone()
+
+    if fetched is None or not fetched[0]:
+        if fetched is None:
+            update_query = """INSERT INTO subscriptions (user_id, subscribed) VALUES (?, 1)"""
+        else:
+            update_query = """UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?"""
+        success_message = 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!'
+    else:
+        update_query = """UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?"""
+        success_message = 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!'
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(update_query, (user_id,))
+        conn.commit()
+
+    bot.send_message(user_id, success_message, reply_markup=update_buttons(user_language, user_id, is_admin=None, mode='main'))
 
 def get_content_description(message : types.Message):
     if message.content_type == 'text':
