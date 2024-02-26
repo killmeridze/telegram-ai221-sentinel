@@ -161,10 +161,12 @@ def update_buttons(language: str, is_admin : bool | None = None, mode : str = 'm
     elif mode == 'settings':
         button_change_language = types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
         button_change_group = types.KeyboardButton(BUTTON_TEXTS[language]["change_group"])
+        button_configure_quote = types.KeyboardButton(BUTTON_TEXTS[language]["configure_quote"])
         button_return = types.KeyboardButton(BUTTON_TEXTS[language]["return"])
 
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.row(button_change_language, button_change_group)
+        keyboard.row(button_configure_quote)
         keyboard.row(button_return)
 
     return keyboard
@@ -186,6 +188,29 @@ def return_to_main(message : types.Message):
 
     prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, is_admin, mode='main'))
+
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
+def return_to_settings(message: types.Message):
+    user_language = get_user_language(message.chat.id)
+    prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='settings'))
+
+
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["configure_quote"])
+def handle_configure_quote(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    subscribe_quote_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["subscribe_quotes"])
+    
+    change_quote_theme_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["change_quote_theme"])
+    
+    return_to_settings_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
+
+    markup.row(subscribe_quote_button,change_quote_theme_button)
+    markup.row(return_to_settings_button)
+
+    prompt_text = 'Выберите опцию:' if get_user_language(message.chat.id) == 'rus' else 'Виберіть опцію:'
+    bot.send_message(message.chat.id, prompt_text, reply_markup=markup)
 
 @bot.message_handler(commands=['start'])
 def start(message : types.Message):
@@ -209,7 +234,9 @@ def start(message : types.Message):
                         subscribed INTEGER NOT NULL CHECK (subscribed IN (0, 1)),
                         language TEXT NOT NULL CHECK (language IN ('rus', 'ukr')),
                         is_admin INTEGER NOT NULL CHECK (is_admin IN (0, 1)),
-                        user_group INTEGER DEFAULT 1 CHECK (user_group IN (1, 2)))""")
+                        user_group INTEGER DEFAULT 1 CHECK (user_group IN (1, 2)),
+                        quotes_subscribed INTEGER DEFAULT 0 CHECK (quotes_subscribed IN (0, 1)),
+                        quote_tag TEXT DEFAULT 'success')""")
         
         cursor.execute("""SELECT * FROM subscriptions WHERE user_id == ?""", (user_id, ))
         existing_user = cursor.fetchone()

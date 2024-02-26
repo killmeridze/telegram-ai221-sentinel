@@ -10,6 +10,10 @@
         "settings": "Настройки",
         "change_group": "Поменять группу",
         "return": "Вернуться",
+        "configure_quote": "Настройки цитат",
+        "subscribe_quotes": "Подписаться на цитаты",
+        "change_quote_theme": "Поменять тему цитат",
+        "return_to_settings": "Вернуться в настройки",
         "welcome_message": "Привет, сливка! Нажми на кнопку, чтобы получить расписание!"
     },
     "ukr": {
@@ -23,6 +27,10 @@
         "settings": "Налаштування",
         "change_group": "Змiнити групу",
         "return": "Повернутися",
+        "configure_quote": "Налаштування цитат",
+        "subscribe_quotes": "Підписатися на цитати",
+        "change_quote_theme": "Змінити тему цитат",
+        "return_to_settings": "Повернутися до налаштування",
         "welcome_message": "Привіт, слiвка! Натисни на кнопку, щоб отримати розклад!"
     }
 }
