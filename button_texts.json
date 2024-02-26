@@ -12,6 +12,7 @@
         "return": "Вернуться",
         "configure_quote": "Настройки цитат",
         "subscribe_quotes": "Подписаться на цитаты",
+        "unsubscribe_quotes": "Отписаться от цитат",
         "change_quote_theme": "Поменять тему цитат",
         "return_to_settings": "Вернуться в настройки",
         "welcome_message": "Привет, сливка! Нажми на кнопку, чтобы получить расписание!"
@@ -29,6 +30,7 @@
         "return": "Повернутися",
         "configure_quote": "Налаштування цитат",
         "subscribe_quotes": "Підписатися на цитати",
+        "unsubscribe_quotes": "Відписатися від цитат",
         "change_quote_theme": "Змінити тему цитат",
         "return_to_settings": "Повернутися до налаштування",
         "welcome_message": "Привіт, слiвка! Натисни на кнопку, щоб отримати розклад!"

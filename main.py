@@ -141,9 +141,10 @@ def update_buttons(language: str, user_id: int, is_admin : bool | None = None, m
 
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("""SELECT subscribed FROM subscriptions WHERE user_id == ?""", (user_id, ))
+        cursor.execute("""SELECT subscribed, quotes_subscribed FROM subscriptions WHERE user_id == ?""", (user_id, ))
         fetched = cursor.fetchone()
         subscribed = fetched[0] if fetched else False
+        quotes_subscribed = fetched[1] if fetched else False
 
     # Главное меню
     if mode == 'main':
@@ -177,6 +178,16 @@ def update_buttons(language: str, user_id: int, is_admin : bool | None = None, m
         keyboard.row(button_configure_quote)
         keyboard.row(button_return)
 
+    # Меню цитат
+    elif mode == 'quotes':
+        subscribe_quote_button = types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe_quotes"] if quotes_subscribed else BUTTON_TEXTS[language]["subscribe_quotes"])
+        change_quote_theme_button = types.KeyboardButton(BUTTON_TEXTS[language]["change_quote_theme"])
+        return_to_settings_button = types.KeyboardButton(BUTTON_TEXTS[language]["return_to_settings"])
+
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.row(subscribe_quote_button,change_quote_theme_button)
+        keyboard.row(return_to_settings_button)
+
     return keyboard
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['settings'])
@@ -195,29 +206,19 @@ def return_to_main(message : types.Message):
         is_admin = cursor.fetchone()[0]
 
     prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
-    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, is_admin, mode='main'))
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, is_admin, mode='main'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
 def return_to_settings(message: types.Message):
     user_language = get_user_language(message.chat.id)
     prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
-    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, mode='settings'))
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='settings'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["configure_quote"])
 def handle_configure_quote(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-    subscribe_quote_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["subscribe_quotes"])
-    
-    change_quote_theme_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["change_quote_theme"])
-    
-    return_to_settings_button = types.KeyboardButton(BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
-
-    markup.row(subscribe_quote_button,change_quote_theme_button)
-    markup.row(return_to_settings_button)
-
-    prompt_text = 'Выберите опцию:' if get_user_language(message.chat.id) == 'rus' else 'Виберіть опцію:'
-    bot.send_message(message.chat.id, prompt_text, reply_markup=markup)
+    user_language = get_user_language(message.chat.id)
+    prompt_text = 'Выберите опцию:' if user_language == 'rus' else 'Виберіть опцію:'
+    bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='quotes'))
 
 @bot.message_handler(commands=['start'])
 def start(message : types.Message):
@@ -364,6 +365,29 @@ def subscribe_unsubscribe_handler(message: types.Message):
         conn.commit()
 
     bot.send_message(user_id, success_message, reply_markup=update_buttons(user_language, user_id, is_admin=None, mode='main'))
+
+@bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe_quotes'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe_quotes']])
+def handle_quotes_subscription(message: types.Message):
+    user_language = get_user_language(message.chat.id)
+    user_id = message.chat.id
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT quotes_subscribed FROM subscriptions WHERE user_id == ?""", (user_id,))
+        fetched = cursor.fetchone()
+
+    if fetched is None or not fetched[0]:
+        update_query = """UPDATE subscriptions SET quotes_subscribed = 1 WHERE user_id == ?"""
+        success_message = 'Вы успешно подписались на цитаты!' if user_language == 'rus' else 'Ви успішно підписалися на цитати!'
+    else:
+        update_query = """UPDATE subscriptions SET quotes_subscribed = 0 WHERE user_id == ?"""
+        success_message = 'Вы успешно отписались от цитат!' if user_language == 'rus' else 'Ви успішно відписалися від цитат!'
+
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(update_query, (user_id,))
+        conn.commit()
+    bot.send_message(user_id, success_message, reply_markup=update_buttons(user_language, user_id, is_admin=None, mode='quotes'))
 
 def get_content_description(message : types.Message):
     if message.content_type == 'text':
