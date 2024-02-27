@@ -172,13 +172,13 @@ def get_subcribe_unsubscibe_quote_button(language: str, user_id: int) -> types.K
     return types.KeyboardButton(BUTTON_TEXTS[language]["unsubscribe_quotes"] if quotes_subscribed else BUTTON_TEXTS[language]["subscribe_quotes"])
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['settings'])
-def show_settings(message: types.Message):
+def show_settings(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     prompt_text = 'Выберите действие:' if user_language == 'rus' else 'Оберіть дію:'
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='settings'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['return'])
-def return_to_main(message: types.Message):
+def return_to_main(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
     with sqlite3.connect('subscriptions.db') as conn:
@@ -190,19 +190,19 @@ def return_to_main(message: types.Message):
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, is_admin, mode='main'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
-def return_to_settings(message: types.Message):
+def return_to_settings(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='settings'))
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["configure_quote"])
-def handle_configure_quote(message: types.Message):
+def handle_configure_quote(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     prompt_text = 'Выберите опцию:' if user_language == 'rus' else 'Виберіть опцію:'
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(user_language, message.chat.id, mode='quotes'))
 
 @bot.message_handler(commands=['start'])
-def start(message: types.Message):
+def start(message: types.Message) -> None:
     logger.info(f'New user - {message.from_user.username} ({message.from_user.first_name})')
 
     username = message.chat.username
@@ -246,7 +246,7 @@ def start(message: types.Message):
     bot.send_message(chat_id=message.chat.id, text=BUTTON_TEXTS[language]["welcome_message"], reply_markup=keyboard)
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['schedule'])
-def schedule(message: types.Message):
+def schedule(message: types.Message) -> None:
     today = datetime.date.today()
     user_language = get_user_language(message.chat.id)
     user_group = get_user_group(message.chat.id)
@@ -257,7 +257,7 @@ def schedule(message: types.Message):
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['schedule_tomorrow'])
-def schedule_tomorrow(message: types.Message):
+def schedule_tomorrow(message: types.Message) -> None:
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
     user_language = get_user_language(message.chat.id)
     user_group = get_user_group(message.chat.id)
@@ -267,7 +267,7 @@ def schedule_tomorrow(message: types.Message):
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe']])
-def subscribe_unsubscribe_handler(message: types.Message):
+def subscribe_unsubscribe_handler(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     user_id = message.chat.id
 
@@ -276,48 +276,55 @@ def subscribe_unsubscribe_handler(message: types.Message):
         cursor.execute("""SELECT subscribed, is_admin FROM subscriptions WHERE user_id == ?""", (user_id, ))
         fetched = cursor.fetchone()
         is_admin = fetched[1] if fetched else False
-
+    
+    logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to subscribe/unsubscribe')
     if fetched is None or not fetched[0]:
         if fetched is None:
             update_query = """INSERT INTO subscriptions (user_id, subscribed) VALUES (?, 1)"""
         else:
             update_query = """UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?"""
         success_message = 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!'
+        logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed")
     else:
         update_query = """UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?"""
         success_message = 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!'
+        logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed")
 
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
-        cursor.execute(update_query, (user_id,))
+        cursor.execute(update_query, (user_id, ))
         conn.commit()
 
     bot.send_message(user_id, success_message, reply_markup=update_buttons(user_language, user_id, is_admin, mode='main'))
 
 @bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe_quotes'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe_quotes']])
-def handle_quotes_subscription(message: types.Message):
+def handle_quotes_subscription(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     user_id = message.chat.id
 
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("""SELECT quotes_subscribed FROM subscriptions WHERE user_id == ?""", (user_id,))
+        cursor.execute("""SELECT quotes_subscribed FROM subscriptions WHERE user_id == ?""", (user_id, ))
         fetched = cursor.fetchone()
 
+    logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to subscribe/unsubscribe to/from quotes')
     if fetched is None or not fetched[0]:
         update_query = """UPDATE subscriptions SET quotes_subscribed = 1 WHERE user_id == ?"""
         success_message = 'Вы успешно подписались на цитаты!' if user_language == 'rus' else 'Ви успішно підписалися на цитати!'
+        logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed to quotes")
     else:
         update_query = """UPDATE subscriptions SET quotes_subscribed = 0 WHERE user_id == ?"""
         success_message = 'Вы успешно отписались от цитат!' if user_language == 'rus' else 'Ви успішно відписалися від цитат!'
+        logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed from quotes")
 
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
-        cursor.execute(update_query, (user_id,))
+        cursor.execute(update_query, (user_id, ))
         conn.commit()
+    
     bot.send_message(user_id, success_message, reply_markup=update_buttons(user_language, user_id, mode='quotes'))
 
-def get_content_description(message : types.Message):
+def get_content_description(message : types.Message) -> str:
     match message.content_type:
         case 'text':
             return f'text "{message.text}"'
@@ -326,14 +333,14 @@ def get_content_description(message : types.Message):
         case 'sticker':
             return 'a sticker'
         case 'animation':
-            return 'a animation'
+            return 'an animation'
         case 'voice':
             return 'a voice'
         case _:
             return 'an unknown content'
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['send_all'], content_types=['text', 'photo', 'sticker', 'animation', 'voice'])
-def get_text_to_send_all(message : types.Message):
+def get_text_to_send_all(message : types.Message) -> None:
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""SELECT is_admin, language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
@@ -349,7 +356,7 @@ def get_text_to_send_all(message : types.Message):
 
     bot.register_next_step_handler(msg, send_all)
 
-def send_all(message : types.Message):
+def send_all(message : types.Message) -> None:
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
@@ -391,7 +398,7 @@ def send_all(message : types.Message):
                 else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{bot_reply_content}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['find_sticker'])
-def get_text_to_find_stickers(message : types.Message):
+def get_text_to_find_stickers(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
     msg = bot.reply_to(message, 'Введите текст для поиска стикеров' if user_language == 'rus' else 'Введіть текст для пошуку стикерів')
@@ -399,7 +406,7 @@ def get_text_to_find_stickers(message : types.Message):
 
     bot.register_next_step_handler(msg, find_stickers)
 
-def find_stickers(message : types.Message):
+def find_stickers(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
     with sqlite3.connect('stickers.db') as conn:
@@ -427,7 +434,7 @@ def find_stickers(message : types.Message):
         logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_quote_theme'])
-def get_quote_tag_from_user(message : types.Message):
+def get_quote_tag_from_user(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
     msg = bot.reply_to(message, ('Введите тему цитаты из списка ниже:\n' if user_language == 'rus' else 'Введіть тему цитати зі списку нижче:\n') + quote_tags_by_letters())
@@ -435,7 +442,7 @@ def get_quote_tag_from_user(message : types.Message):
 
     bot.register_next_step_handler(msg, proccess_tag)
 
-def proccess_tag(message : types.Message):
+def proccess_tag(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     tag = message.text
 
@@ -453,7 +460,7 @@ def proccess_tag(message : types.Message):
     logger.info(f'User {message.from_user.username}(user_id - {message.from_user.id}) changed quote tag to {tag}')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_language'])
-def change_language(message : types.Message):
+def change_language(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     
     keyboard = types.InlineKeyboardMarkup()
@@ -467,7 +474,7 @@ def change_language(message : types.Message):
     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change language')
 
 @bot.callback_query_handler(func=lambda call: call.data == 'rus' or call.data == 'ukr')
-def answer_change_language(call : types.CallbackQuery):
+def answer_change_language(call : types.CallbackQuery) -> None:
     user_language = get_user_language(call.message.chat.id)
     full_language_name = 'russian' if call.data == 'rus' else 'ukranian'
 
@@ -495,7 +502,7 @@ def answer_change_language(call : types.CallbackQuery):
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_group'])
-def change_group(message : types.Message):
+def change_group(message : types.Message) -> None:
     user_language = get_user_language(message.chat.id)
     
     keyboard = types.InlineKeyboardMarkup()
@@ -509,7 +516,7 @@ def change_group(message : types.Message):
     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change group')
 
 @bot.callback_query_handler(func=lambda call: call.data == '1' or call.data == '2')
-def answer_change_group(call : types.CallbackQuery):
+def answer_change_group(call : types.CallbackQuery) -> None:
     new_user_group_number = int(call.data)
     new_user_group = 'ВД02-01' if new_user_group_number == 1 else 'ВД02-02'
 
@@ -532,7 +539,7 @@ def answer_change_group(call : types.CallbackQuery):
 
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
-def start_bot_polling():
+def start_bot_polling() -> None:
     RETRY_DELAY_BASE = 2  # Начальная задержка
     MAX_RETRY_DELAY = 600  # Максимальная задержка в секундах (10 минут)
     
