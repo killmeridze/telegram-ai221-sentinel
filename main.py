@@ -256,10 +256,18 @@ def subscribe_unsubscribe_handler(message: types.Message) -> None:
         if fetched is None:
             update_query = """INSERT INTO subscriptions (user_id, subscribed) VALUES (?, 1)"""
         else:
+            if message.text == BUTTON_TEXTS[user_language]['unsubscribe']:
+                logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) had been already unsubscribed")
+                return
+            
             update_query = """UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?"""
         success_message = 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!'
         logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed")
     else:
+        if message.text == BUTTON_TEXTS[user_language]['subscribe']:
+            logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) had been already subscribed")
+            return
+        
         update_query = """UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?"""
         success_message = 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!'
         logger.info(f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed")
@@ -468,7 +476,7 @@ def answer_change_language(call : types.CallbackQuery) -> None:
 
     bot.answer_callback_query(call.id, 'Язык изменён' if call.data == 'rus' else 'Мову змінено')
     
-    keyboard = update_buttons(call.data, is_admin, 'settings')
+    keyboard = update_buttons(call.data, call.message.chat.id, is_admin, 'settings')
 
     logger.info(f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) changed language to {full_language_name}')
 
