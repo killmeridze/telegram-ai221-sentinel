@@ -2,149 +2,156 @@
     "monday": [
         {
             "week_parity": false,
+            "group": null,
             "time": "8:00-9:35",
-            "name": "Социология (Лекция)",
+            "name": "Конфликтология (Лекция)",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0"
+                "https://meet.google.com/evc-unoe-grn"
             ],
-            "teachers": "Северинюк Т.А."
+            "teachers": "Лисенко О.М."
         },
         {
             "week_parity": true,
-            "group": 1,
+            "group": null,
             "time": "8:00-9:35",
-            "name": "Социология (Практика) для группы ВД02-01",
+            "name": "Конфликтология (Практика)",
             "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0"
+                "https://meet.google.com/xng-yhne-khy"
             ],
-            "teachers": "Северинюк Т.А."
+            "teachers": "Семенкова А.Н."
         },
         {
+            "week_parity": null,
+            "group": null,
             "time": "9:50-11:25",
-            "name": "Объектно-ориентированное программирование (Лекция)",
+            "name": "Программирование систем ІоТ (Лекция)",
             "links": [
-                "bit.ly/hodovychenko_zoom"
+                "https://meet.google.com/jrf-dbjh-gab"
             ],
-            "teachers": "Годовиченко Н.А."
+            "teachers": "Кондратьев С.Б."
         },
         {
+            "week_parity": null,
+            "group": null,
             "time": "11:40-13:15",
-            "name": "Теория вероятностей и мат.статистика (Лекция)",
+            "name": "ВЕБ-технологии и ВЕБ-дизайн (Лекция)",
             "links": [
-                "https://us04web.zoom.us/j/6592901524?pwd=TFpiSHhTdnpxU0FPdFNVQ3d2eU1sdz09",
-                "Пароль: xUwk87"
+                "https://meet.google.com/wtb-igyr-gsc"
             ],
-            "teachers": "Юрченко М.А."
+            "teachers": "Щербина С.К."
         }
     ],
     "tuesday": [
         {
-            "week_parity": true,
-            "group": 2,
-            "time": "8:00-9:35",
-            "name": "Социология (Практика) для группы ВД02-02",
-            "links": [
-                "https://meet.google.com/nte-kopn-dzm?authuser=0"
-            ],
-            "teachers": "Северинюк Т.А."
-        },
-        {
+            "week_parity": null,
+            "group": null,
             "time": "9:50-11:25",
-            "name": "Теория алгоритмов (Лекция)",
+            "name": "Объектно-ориентированное программирование (Лекция)",
             "links": [
-                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09",
-                "Пароль: 779285"
-            ],
-            "teachers": "Арсирий Е.А."
-        },
-        {
-            "time": "11:40-13:15",
-            "name": "Инструментальные средства в IoT (Лекция)",
-            "links": [
-                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09"
-            ],
-            "teachers": "Ядрова М.В."
-        }
-    ],
-    "wednesday": [
-        {
-            "week_parity": true,
-            "time": "8:00-9:35",
-            "name": "Теория вероятностей (Практика)",
-            "links": [
-                "https://us04web.zoom.us/j/8896730967?pwd=SVpUTitWdnRob2ZpNUZOVVpZam5VZz09",
-                "Пароль: 0VJJ9D"
-            ],
-            "teachers": "Соловьёва О.В."
-        },
-        {
-            "week_parity": false,
-            "time": "9:50-11:25",
-            "name": "Инструментальные средства в IoT (Лаб)",
-            "links": [
-                "https://us04web.zoom.us/j/2756188005?pwd=MmdEdC9saUlMTmhENzBPUkl1bm91QT09"
-            ],
-            "teachers": "Ядрова М.В., Костенко В.Л."
-        },
-        {
-            "week_parity": true,
-            "time": "9:50-11:25",
-            "name": "Теория алгоритмов (Лаб)",
-            "links": [
-                "https://us02web.zoom.us/j/88573994331?pwd=S242c0FXVjRCYzRzS3FvU3dZbENtZz09"
-            ],
-            "teachers": "Арсирий Е.А., Смык С.Ю."
-        }
-    ],
-    "thursday": [
-        {
-            "week_parity": false,
-            "time": "8:00-9:35",
-            "name": "Украинский язык по проф. направлению (Лекция)",
-            "links": [
-                "https://meet.google.com/okm-kdaa-xfu?authuser=2"
-            ],
-            "teachers": "Лавренюк В.В."
-        },
-        {
-            "time": "9:50-11:25",
-            "name": "Организация баз данных и знаний (Лекция)",
-            "links": [
-                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
-            ],
-            "teachers": "Блажко А.А."
-        },
-        {
-            "time": "11:40-13:15",
-            "name": "Организация баз данных и знаний (Лаб)",
-            "links": [
-                "https://us05web.zoom.us/j/5324030015?pwd=czMvN2pwbnlQK1gvNFFMZXE4L2lyUT09"
-            ],
-            "teachers": "Дрозд М.А."
-        }
-    ],
-    "friday": [
-        {
-            "time": "8:00-9:35",
-            "name": "Объектно-ориентированное программирование (Лаб)",
-            "links": [
-                "bit.ly/hodovychenko_zoom"
+                "https://bit.ly/hodovychenko_zoom"
             ],
             "teachers": "Годовиченко Н.А."
         },
         {
-            "time": "9:50-11:25",
-            "name": "Украинский язык по проф. направлению (Практика)",
+            "week_parity": null,
+            "group": null,
+            "time": "11:40-13:15",
+            "name": "Современные системы управления базами данных (Лекция)",
             "links": [
-                "https://meet.google.com/uzc-ktfm-tdy?authuser=2"
+                "https://us04web.zoom.us/j/72822539350?pwd=yaDFQzalcdS7SrpPVSaEntk67KBEkm.1",
+                "Пароль: 1237156"
             ],
-            "teachers": "Маси Н.И."
+            "teachers": "Иванов А.В."
         }
     ],
-    "saturday": [
+    "wednesday": [
         {
-            "schedule-day": 668
+            "week_parity": null,
+            "group": null,
+            "time": "9:50-11:25",
+            "name": "Технологии компьютерного проектирования (Лаб)",
+            "links": [
+                "https://us02web.zoom.us/j/82640793657?pwd=VkhsU1I1K2FCbDQ2SjVGNmQ3U2ZSUT09",
+                "Пароль: 723829"
+            ],
+            "teachers": "Галчонков О.Н. и Бабич Н.И."
+        },
+        {
+            "week_parity": null,
+            "group": null,
+            "time": "11:40-13:15",
+            "name": "ВЕБ-технологии и ВЕБ-дизайн (Лаб)",
+            "links": [
+                "https://meet.google.com/vfv-djdc-rop"
+            ],
+            "teachers": "Червоненко П.П. и Щербина С.К."
         }
     ],
+    "thursday": [
+        {
+            "week_parity": true,
+            "group": null,
+            "time": "8:00-9:35",
+            "name": "Объектно-ориентированное программирование (Практика)",
+            "links": [
+                "https://bit.ly/hodovychenko_zoom"
+            ],
+            "teachers": "Годовиченко Н.А. та Смык С.Ю."
+        },
+        {
+            "week_parity": null,
+            "group": null,
+            "time": "9:50-11:25",
+            "name": "Технологии компьютерного проектирования (Лекція)",
+            "links": [
+                "https://us02web.zoom.us/j/88210940395?pwd=aGZFRzFpN3NPaVdJa3hXcytEQzd1Zz09",
+                "Пароль: 930067"
+            ],
+            "teachers": "Галчонков О.Н."
+        },
+        {
+            "week_parity": false,
+            "group": null,
+            "time": "11:40-13:15",
+            "name": "Философия (Лаб)",
+            "links": [
+                "https://teams.microsoft.com/l/meetup-join/19%3ajiFks_t_8ouB7_bgANdHu_Q4UHG41OL2kFIMdqlQJg41%40thread.tacv2/1708806087427?"
+            ],
+            "teachers": "Янушевич И.А."
+        }
+    ],
+    "friday": [
+        {
+            "week_parity": false,
+            "group": null,
+            "time": "9:50-11:25",
+            "name": "Программирование систем ІоТ (Лаб)",
+            "links": [
+                "https://meet.google.com/jrf-dbjh-gab"
+            ],
+            "teachers": "Ядрова М.В. и Кондратьев С.Б."
+        },
+        {
+            "week_parity": true,
+            "group": null,
+            "time": "9:50-11:25",
+            "name": "Современные системы управления базами данных (Лаб)",
+            "links": [
+                "https://us04web.zoom.us/j/8177791667?pwd=Z1NuQzZjdVRDOStHNVdrNmwvNllLdz09&omn=77021159346"
+            ],
+            "teachers": "Дрозд М.А. и Глава М.Г."
+        },
+        {
+            "week_parity": null,
+            "group": null,
+            "time": "11:40-13:15",
+            "name": "Философия (Лекция)",
+            "links": [
+                "https://teams.microsoft.com/l/meetup-join/19%3ajiFks_t_8ouB7_bgANdHu_Q4UHG41OL2kFIMdqlQJg41%40thread.tacv2/1708806087427?"
+            ],
+            "teachers": "Янушевич И.А."
+        }
+    ],
+    "saturday": [],
     "sunday": []
 }
