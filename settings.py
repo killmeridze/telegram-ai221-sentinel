@@ -23,8 +23,7 @@ weekday_name_uk_dict = {
 day_names = [None, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 
 quote_tags = [
-    'Age', 
-    'Athletics',
+    'Age',
     'Business',
     'Change',
     'Character',
@@ -49,7 +48,6 @@ quote_tags = [
     'Health',
     'History',
     'Honor',
-    'Humor',
     'Humorous',
     'Imagination',
     'Inspirational',
@@ -67,7 +65,6 @@ quote_tags = [
     'Philosophy',
     'Politics',
     'Power Quotes',
-    'Proverb',
     'Religion',
     'Sadness',
     'Science',

@@ -47,20 +47,20 @@ def escape_chars(text: str) -> str:
 
 
 def quote_tags_by_letters() -> str:
-    return """A: Age, Athletics
+    return """A: Age
 B: Business 
 C: Change, Character, Competition, Conservative, Courage, Creativity 
 E: Education, Ethics 
 F: Failure, Faith, Family, Famous Quotes, Film, Freedom, Friendship, Future
 G: Generosity, Genius, Gratitude
-H: Happiness, Health, History, Honor, Humor, Humorous
+H: Happiness, Health, History, Honor, Humorous
 I: Imagination, Inspirational
 K: Knowledge
 L: Leadership, Life, Literature, Love
 M: Mathematics, Motivational
 N: Nature
 O: Opportunity
-P: Pain, Perseverance, Philosophy, Politics, Power Quotes, Proverb
+P: Pain, Perseverance, Philosophy, Politics, Power Quotes
 R: Religion
 S: Sadness, Science, Self, Self Help, Social Justice, Society, Spirituality, Sports, Stupidity, Success
 T: Technology, Time, Tolerance, Truth
