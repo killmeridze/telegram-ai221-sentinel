@@ -68,23 +68,12 @@
         {
             "week_parity": null,
             "group": null,
-            "time": "9:50-11:25",
-            "name": "Технологии компьютерного проектирования (Лаб)",
-            "links": [
-                "https://us02web.zoom.us/j/82640793657?pwd=VkhsU1I1K2FCbDQ2SjVGNmQ3U2ZSUT09",
-                "Пароль: 723829"
-            ],
-            "teachers": "Галчонков О.Н. и Бабич Н.И."
-        },
-        {
-            "week_parity": null,
-            "group": null,
             "time": "11:40-13:15",
             "name": "ВЕБ-технологии и ВЕБ-дизайн (Лаб)",
             "links": [
                 "https://meet.google.com/wtb-igyr-gsc"
             ],
-            "teachers": "Червоненко П.П. и Щербина С.К."
+            "teachers": "Щербина С.К."
         }
     ],
     "thursday": [
@@ -96,7 +85,7 @@
             "links": [
                 "https://bit.ly/hodovychenko_zoom"
             ],
-            "teachers": "Годовиченко Н.А. та Смык С.Ю."
+            "teachers": "Годовиченко Н.А."
         },
         {
             "week_parity": null,
@@ -129,7 +118,7 @@
             "links": [
                 "https://meet.google.com/jrf-dbjh-gab"
             ],
-            "teachers": "Ядрова М.В. и Кондратьев С.Б."
+            "teachers": "Кондратьев С.Б."
         },
         {
             "week_parity": true,
@@ -139,7 +128,7 @@
             "links": [
                 "https://us04web.zoom.us/j/8177791667?pwd=Z1NuQzZjdVRDOStHNVdrNmwvNllLdz09&omn=77021159346"
             ],
-            "teachers": "Дрозд М.А. и Глава М.Г."
+            "teachers": "Глава М.Г."
         },
         {
             "week_parity": null,
