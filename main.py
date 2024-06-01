@@ -338,7 +338,7 @@ def get_text_to_send_all(message : types.Message) -> None:
 
     bot.register_next_step_handler(msg, send_all)
 
-def send_all(message : types.Message) -> None:
+def send_all(message: types.Message) -> None:
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
@@ -372,9 +372,15 @@ def send_all(message : types.Message) -> None:
             logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) sent {content_description} to {user_id[0]} via send all command')
             successful_sends += 1
         except telebot.apihelper.ApiException as e:
-            logger.warning(f'Failed to send a message to user with user_id - {user_id[0]}: {e}')
+            if e.error_code == 403 and 'bot was blocked by the user' in e.result.text:
+                cursor.execute("""DELETE FROM subscriptions WHERE user_id = ?""", (user_id[0],))
+                conn.commit()
+                logger.info(f'User with user_id - {user_id[0]} has been removed from the database due to blocking the bot.')
+            else:
+                logger.warning(f'Failed to send a message to user with user_id - {user_id[0]}: {e}')
         total_users += 1
         sleep(1)
+    
     bot_reply_content = content_description if message.content_type != 'text' else f'Сообщение:\n{message.text}'
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{bot_reply_content}' if user_language == 'rus'
                 else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{bot_reply_content}')
