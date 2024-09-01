@@ -78,23 +78,25 @@
     ],
     "wednesday": [
         {
-            "time": "9:50-11:25",
-            "name": "Інтелектуальний аналіз даних - Лаб",
-            "links": [
-                "https://meet.google.com/whs-kgcz-wqj"
-            ],
-            "teachers": "Кошутіна Д.В. та Смик С.Ю."
-        },
-        {
             "time": "11:40-13:15",
             "name": "Обчислювальні методи - Лекція",
             "links": [
-                "https://teams.microsoft.com/l/meetup-join/19%3ayp3vNP3BqAVPkuW2Y8YqKOKXF0QQlydP0_Y1XiVUDqY1%40thread.tacv2/1724955558997?context=%7b%22Tid%22%3a%22bd2fa240-71fc-45bd-abce-f1bc80beeb0a%22%2c%22Oid%22%3a%226e50c4db-d1c1-4aee-989d-96271729c62c%22%7d"
+                "https://meet.google.com/wtb-igyr-gsc"
             ],
-            "teachers": "Шпиньковський О.А."
+            "teachers": "Щербина С.К."
         }
     ],
     "thursday": [
+        {
+            "week_parity": true,
+            "group": null,
+            "time": "8:00-9:35",
+            "name": "Об'єктно-орієнтоване програмування (Практика)",
+            "links": [
+                "https://bit.ly/hodovychenko_zoom"
+            ],
+            "teachers": "Годовіченко М.А."
+        },
         {
             "week_parity": null,
             "group": null,
@@ -109,10 +111,14 @@
     ],
     "friday": [
         {
-            "time": "8:00-9:35",
-            "name": "Комп'ютерні мережі - Лаб",
-            "links": [],
-            "teachers": "Кузнєцов М.О."
+            "week_parity": false,
+            "group": null,
+            "time": "9:50-11:25",
+            "name": "Програмування систем ІоТ (Лаб)",
+            "links": [
+                "https://meet.google.com/jrf-dbjh-gab"
+            ],
+            "teachers": "Кондратьєв С.Б."
         },
         {
             "week_parity": true,
@@ -123,7 +129,7 @@
                 "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09",
                 "Пароль: 306089"
             ],
-            "teachers": "Блажко О.А."
+            "teachers": "Глава М.Г."
         },
         {
             "time": "11:40-13:15",
