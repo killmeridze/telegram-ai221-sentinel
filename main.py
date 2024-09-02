@@ -88,16 +88,16 @@ def send_schedule() -> None:
             logger.warning(f'Failed to send a schedule to user with user_id - {subscriber[0]}: {e}')
             sleep(1)
 
-    if today.strftime("%A").lower() == 'tuesday':
-        schedule_files = ['rus_schedule.json', 'ukr_schedule.json']
-        for schedule_file in schedule_files:
-            with open(schedule_file, 'r', encoding='utf-8') as file:
-                data = json.load(file)
+    # if today.strftime("%A").lower() == 'tuesday':
+    #     schedule_files = ['rus_schedule.json', 'ukr_schedule.json']
+    #     for schedule_file in schedule_files:
+    #         with open(schedule_file, 'r', encoding='utf-8') as file:
+    #             data = json.load(file)
 
-            data['saturday'][0]['schedule-day'] += 1
+    #         data['saturday'][0]['schedule-day'] += 1
 
-            with open(schedule_file, 'w', encoding='utf-8') as file:
-                json.dump(data, file, ensure_ascii=False, indent=4)
+    #         with open(schedule_file, 'w', encoding='utf-8') as file:
+    #             json.dump(data, file, ensure_ascii=False, indent=4)
 
 def update_buttons(language: str, user_id: int, is_admin: bool = False, mode: str = 'main') -> types.ReplyKeyboardMarkup:
     '''Функция для обновления кнопок в соответствии с языком пользователя и выбранным режимом.'''
@@ -581,7 +581,7 @@ if __name__ == '__main__':
     sc.every().wednesday.at('07:00').do(send_schedule)
     sc.every().thursday.at('07:00').do(send_schedule)
     sc.every().friday.at('07:00').do(send_schedule)
-    sc.every().saturday.at('07:00').do(send_schedule)
+    # sc.every().saturday.at('07:00').do(send_schedule)
     # sc.every().second.do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
