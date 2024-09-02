@@ -2,7 +2,6 @@
     "monday": [
         {
             "week_parity": false,
-            "group": null,
             "time": "8:00-9:35",
             "name": "Психологія - Лекція",
             "links": [
@@ -12,7 +11,7 @@
         },
         {
             "week_parity": true,
-            "group": null,
+            "group": 1,
             "time": "8:00-9:35",
             "name": "Психологія - Практика для групи ВД01-14",
             "links": [
@@ -21,8 +20,6 @@
             "teachers": "Волошенко М.О."
         },
         {
-            "week_parity": null,
-            "group": null,
             "time": "9:50-11:25",
             "name": "Комп'ютерні мережі - Лекція",
             "links": [
@@ -78,58 +75,47 @@
     ],
     "wednesday": [
         {
+            "time": "9:50-11:25",
+            "name": "Інтелектуальний аналіз даних - Лаб",
+            "links": [
+                "https://meet.google.com/whs-kgcz-wqj"
+            ],
+            "teachers": "Кошутіна Д.В. та Смик С.Ю."
+        },
+        {
             "time": "11:40-13:15",
             "name": "Обчислювальні методи - Лекція",
             "links": [
-                "https://meet.google.com/wtb-igyr-gsc"
+                "https://teams.microsoft.com/l/meetup-join/19%3ayp3vNP3BqAVPkuW2Y8YqKOKXF0QQlydP0_Y1XiVUDqY1%40thread.tacv2/1724955558997?context=%7b%22Tid%22%3a%22bd2fa240-71fc-45bd-abce-f1bc80beeb0a%22%2c%22Oid%22%3a%226e50c4db-d1c1-4aee-989d-96271729c62c%22%7d"
             ],
-            "teachers": "Щербина С.К."
+            "teachers": "Шпиньковський О.А."
         }
     ],
     "thursday": [
         {
-            "week_parity": true,
-            "group": null,
-            "time": "8:00-9:35",
-            "name": "Об'єктно-орієнтоване програмування (Практика)",
-            "links": [
-                "https://bit.ly/hodovychenko_zoom"
-            ],
-            "teachers": "Годовіченко М.А."
-        },
-        {
-            "week_parity": null,
-            "group": null,
             "time": "9:50-11:25",
             "name": "Забезпечення якості та контроль якості і тестування ПП - Лекція",
             "links": [
-                "https://us02web.zoom.us/j/88210940395?pwd=aGZFRzFpN3NPaVdJa3hXcytEQzd1Zz09",
-                "Пароль: 930067"
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
             ],
             "teachers": "Баськов І.О."
         }
     ],
     "friday": [
         {
-            "week_parity": false,
-            "group": null,
-            "time": "9:50-11:25",
-            "name": "Програмування систем ІоТ (Лаб)",
-            "links": [
-                "https://meet.google.com/jrf-dbjh-gab"
-            ],
-            "teachers": "Кондратьєв С.Б."
+            "time": "8:00-9:35",
+            "name": "Комп'ютерні мережі - Лаб",
+            "links": [],
+            "teachers": "Кузнєцов М.О."
         },
         {
-            "week_parity": true,
-            "group": null,
             "time": "9:50-11:25",
             "name": "Технології створення ПП - Лекція",
             "links": [
                 "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09",
                 "Пароль: 306089"
             ],
-            "teachers": "Глава М.Г."
+            "teachers": "Блажко О.А."
         },
         {
             "time": "11:40-13:15",
