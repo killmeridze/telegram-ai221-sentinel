@@ -48,6 +48,14 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
         # Проверка на чётность/нечётность. False - нечётная, True - чётная
         current_week_number = today.isocalendar()[1]
         week_parity = (current_week_number - settings.FIRST_WEEK_NUMBER) % 2 != 0
+    else:
+        schedule_day = schedule[0].get('schedule-day', 0)
+
+        day = schedule_day % 5 + 1
+        week_parity = ((schedule_day // 5) + 1) % 2 == 0
+
+        with open(schedule_file, 'r', encoding='utf-8') as file:
+            schedule = json.load(file).get(settings.day_names[day])
 
     for item in schedule:
         if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
@@ -122,13 +130,13 @@ def update_buttons(language: str, user_id: int, is_admin: bool = False, mode: st
     # Меню настроек
     elif mode == 'settings':
         button_change_language = types.KeyboardButton(BUTTON_TEXTS[language]["change_language"])
-        # button_change_group = types.KeyboardButton(BUTTON_TEXTS[language]["change_group"])
+        button_change_group = types.KeyboardButton(BUTTON_TEXTS[language]["change_group"])
         button_configure_quote = types.KeyboardButton(BUTTON_TEXTS[language]["configure_quote"])
         button_return = types.KeyboardButton(BUTTON_TEXTS[language]["return"])
 
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.row(button_change_language, button_configure_quote)
-        # keyboard.row(button_configure_quote)
+        keyboard.row(button_change_language, button_change_group)
+        keyboard.row(button_configure_quote)
         keyboard.row(button_return)
 
     # Меню цитат
@@ -576,11 +584,11 @@ def schedule_checker() -> None:
         sleep(1)
 
 if __name__ == '__main__':
-    sc.every().monday.at('07:00').do(send_schedule)
-    sc.every().tuesday.at('07:00').do(send_schedule)
-    sc.every().wednesday.at('07:00').do(send_schedule)
-    sc.every().thursday.at('07:00').do(send_schedule)
-    sc.every().friday.at('07:00').do(send_schedule)
+    # sc.every().monday.at('07:00').do(send_schedule)
+    # sc.every().tuesday.at('07:00').do(send_schedule)
+    # sc.every().wednesday.at('07:00').do(send_schedule)
+    # sc.every().thursday.at('07:00').do(send_schedule)
+    # sc.every().friday.at('07:00').do(send_schedule)
     # sc.every().saturday.at('07:00').do(send_schedule)
     # sc.every().second.do(send_schedule)
 
