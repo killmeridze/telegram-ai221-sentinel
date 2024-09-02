@@ -8484,6 +8484,7 @@
 2024-05-31 10:16:56 - INFO - Sent schedule to snegurr (snegurr)(user_id - 952862354) via command "Расписание"
 2024-05-31 12:38:30 - INFO - Sent schedule to vasiliy_nevskiy (Vasiliy)(user_id - 1146488629) via command "Расписание"
 2024-05-31 12:38:30 - INFO - Sent schedule to vasiliy_nevskiy (Vasiliy)(user_id - 1146488629) via command "Расписание"
+<<<<<<< HEAD
 2024-06-01 06:32:46 - INFO - New user - Sofiaa_pon_0 (Софич,,)
 2024-06-01 06:32:46 - INFO - New user - Sofiaa_pon_0 (Софич,,)
 2024-06-01 06:32:46 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
@@ -9662,3 +9663,53 @@
 2024-06-17 08:07:48 - INFO - User with user_id - 5346439755 has been removed from the database due to blocking the bot.
 2024-06-17 08:07:50 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) sent text "Всем удачной сессии и отличных каникул. До встречи в следующем семестре!" to 6401404807 via send all command
 2024-06-17 08:07:50 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) sent text "Всем удачной сессии и отличных каникул. До встречи в следующем семестре!" to 6401404807 via send all command
+=======
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:33 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:40 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:40 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:19:46 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:46 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:19:53 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:19:53 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:19:54 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed language to ukranian
+2024-09-02 07:19:54 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed language to ukranian
+2024-09-02 07:19:56 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад"
+2024-09-02 07:19:56 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад"
+2024-09-02 07:19:57 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад на завтра"
+2024-09-02 07:19:57 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад на завтра"
+2024-09-02 07:20:00 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:20:00 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:21:34 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:34 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:35 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-15
+2024-09-02 07:21:35 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-15
+2024-09-02 07:21:37 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад"
+2024-09-02 07:21:37 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад"
+2024-09-02 07:21:38 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад на завтра"
+2024-09-02 07:21:38 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Розклад на завтра"
+2024-09-02 07:21:45 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:45 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:46 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-14
+2024-09-02 07:21:46 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-14
+2024-09-02 07:21:47 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:47 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change group
+2024-09-02 07:21:48 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-15
+2024-09-02 07:21:48 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed group to ВД01-15
+2024-09-02 07:21:48 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:21:48 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) tried to change language
+2024-09-02 07:21:49 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed language to russian
+2024-09-02 07:21:49 - INFO - User YokarniyBabai (Никита)(user_id - 700766922) changed language to russian
+2024-09-02 07:21:51 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:21:51 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание"
+2024-09-02 07:21:52 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+2024-09-02 07:21:52 - INFO - Sent schedule to YokarniyBabai (Никита)(user_id - 700766922) via command "Расписание на завтра"
+>>>>>>> bd0d0c9c617563c157f162e39fbaa9c1b24581a2
