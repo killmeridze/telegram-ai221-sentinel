@@ -68,7 +68,12 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
         if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
             message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
-                message_text += f'{link}\n'
+                if 'Пароль' in link:
+                    message_text += f'{link}\n'
+                else:
+                    link_shortcut = 'Ссылка на ' if language == 'rus' else 'Посилання на '
+                    link_shortcut += get_platform(link)
+                    message_text += f'[{link_shortcut}]({link})\n'
             message_text += f'{item["teachers"]}\n\n'
 
     return message_text
@@ -253,7 +258,9 @@ def schedule(message: types.Message) -> None:
 
     message_text = schedule_text(today, user_language, user_group)
 
-    bot.send_message(chat_id=message.chat.id, text=message_text, link_preview_options=types.LinkPreviewOptions(is_disabled=True))
+    message_text = escape_chars(message_text)
+
+    bot.send_message(chat_id=message.chat.id, text=message_text, parse_mode="MarkdownV2", link_preview_options=types.LinkPreviewOptions(is_disabled=True))
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['schedule_tomorrow'])
@@ -263,7 +270,9 @@ def schedule_tomorrow(message: types.Message) -> None:
     user_group = get_user_group(message.chat.id)
     message_text = schedule_text(tomorrow, user_language, user_group)
 
-    bot.send_message(chat_id=message.chat.id, text=message_text, link_preview_options=types.LinkPreviewOptions(is_disabled=True))
+    message_text = escape_chars(message_text)
+
+    bot.send_message(chat_id=message.chat.id, text=message_text, parse_mode="MarkdownV2", link_preview_options=types.LinkPreviewOptions(is_disabled=True))
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe']])
@@ -513,18 +522,18 @@ def change_group(message : types.Message) -> None:
     
     keyboard = types.InlineKeyboardMarkup()
     
-    first_group = types.InlineKeyboardButton(text='ВД02-01', callback_data='1')
-    second_group = types.InlineKeyboardButton(text='ВД02-02', callback_data='2')
+    first_group = types.InlineKeyboardButton(text='ВД01-14', callback_data='1')
+    second_group = types.InlineKeyboardButton(text='ВД01-15', callback_data='2')
 
     keyboard.add(first_group, second_group)
 
-    bot.send_message(message.chat.id, 'В какой группе по социологии вы находитесь?' if user_language == 'rus' else 'В якій групі по соціології ви знаходитесь?', reply_markup=keyboard)
+    bot.send_message(message.chat.id, 'В какой группе по психологии вы находитесь?' if user_language == 'rus' else 'В якій групі з психологоії ви знаходитесь?', reply_markup=keyboard)
     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change group')
 
 @bot.callback_query_handler(func=lambda call: call.data == '1' or call.data == '2')
 def answer_change_group(call : types.CallbackQuery) -> None:
     new_user_group_number = int(call.data)
-    new_user_group = 'ВД02-01' if new_user_group_number == 1 else 'ВД02-02'
+    new_user_group = 'ВД01-14' if new_user_group_number == 1 else 'ВД01-15'
 
     user_language = get_user_language(call.message.chat.id)
     user_group = get_user_group(call.message.chat.id)
@@ -574,13 +583,13 @@ def schedule_checker() -> None:
         sleep(1)
 
 if __name__ == '__main__':
-    # sc.every().monday.at('07:00').do(send_schedule)
-    # sc.every().tuesday.at('07:00').do(send_schedule)
-    # sc.every().wednesday.at('07:00').do(send_schedule)
-    # sc.every().thursday.at('07:00').do(send_schedule)
-    # sc.every().friday.at('07:00').do(send_schedule)
-    # sc.every().saturday.at('07:00').do(send_schedule)
-    sc.every().second.do(send_schedule)
+    sc.every().monday.at('07:00').do(send_schedule)
+    sc.every().tuesday.at('07:00').do(send_schedule)
+    sc.every().wednesday.at('07:00').do(send_schedule)
+    sc.every().thursday.at('07:00').do(send_schedule)
+    sc.every().friday.at('07:00').do(send_schedule)
+    sc.every().saturday.at('07:00').do(send_schedule)
+    # sc.every().second.do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()

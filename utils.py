@@ -38,12 +38,21 @@ def get_user_quote_tag(chat_id: int) -> str:
 
 def escape_chars(text: str) -> str:
     '''Функция для экранирования символов в text'''
-    chars_to_escape = ['|', '_', '(', ')', '-', '=', '.', '!']
+    chars_to_escape = ['|', '_', '-', '=', '.', '!']
     
     for char in chars_to_escape:
         text = text.replace(char, f"\{char}")
 
     return text
+
+def get_platform(link: str) -> str:
+    '''Функция для получения платформы по ссылке link'''
+    if 'zoom' in link:
+        return 'Zoom'
+    elif 'meet.google' in link:
+        return 'Google Meet'
+    elif 'teams.microsoft' in link:
+        return 'Microsoft Teams'
 
 
 def quote_tags_by_letters() -> str:
