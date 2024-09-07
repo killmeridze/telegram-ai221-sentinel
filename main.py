@@ -53,7 +53,12 @@ def schedule_text(today: datetime.date, language: str, group: int) -> str:
         if (item.get("week_parity") is None or item.get("week_parity") is week_parity) and (item.get("group") is None or item.get("group") is group):
             message_text += f'{item["time"]}\n{item["name"]}:\n'
             for link in item["links"]:
-                message_text += f'{link}\n'
+                if 'Пароль' in link:
+                    message_text += f'{link}\n'
+                else:
+                    link_shortcut = 'Ссылка на ' if language == 'rus' else 'Посилання на '
+                    link_shortcut += get_platform(link)
+                    message_text += f'[{link_shortcut}]({link})\n'
             message_text += f'{item["teachers"]}\n\n'
 
     return message_text
@@ -227,7 +232,9 @@ def schedule(message: types.Message) -> None:
 
     message_text = schedule_text(today, user_language, user_group)
 
-    bot.send_message(chat_id=message.chat.id, text=message_text, link_preview_options=types.LinkPreviewOptions(is_disabled=True))
+    message_text = escape_chars(message_text)
+
+    bot.send_message(chat_id=message.chat.id, text=message_text, parse_mode="MarkdownV2", link_preview_options=types.LinkPreviewOptions(is_disabled=True))
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['schedule_tomorrow'])
@@ -237,7 +244,9 @@ def schedule_tomorrow(message: types.Message) -> None:
     user_group = get_user_group(message.chat.id)
     message_text = schedule_text(tomorrow, user_language, user_group)
 
-    bot.send_message(chat_id=message.chat.id, text=message_text, link_preview_options=types.LinkPreviewOptions(is_disabled=True))
+    message_text = escape_chars(message_text)
+
+    bot.send_message(chat_id=message.chat.id, text=message_text, parse_mode="MarkdownV2", link_preview_options=types.LinkPreviewOptions(is_disabled=True))
     logger.info(f'Sent schedule to {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) via command "{message.text}"')
 
 @bot.message_handler(func=lambda message: message.text in [BUTTON_TEXTS[get_user_language(message.chat.id)]['subscribe'], BUTTON_TEXTS[get_user_language(message.chat.id)]['unsubscribe']])
@@ -338,7 +347,7 @@ def get_text_to_send_all(message : types.Message) -> None:
 
     bot.register_next_step_handler(msg, send_all)
 
-def send_all(message : types.Message) -> None:
+def send_all(message: types.Message) -> None:
     with sqlite3.connect('subscriptions.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""SELECT language FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
@@ -372,9 +381,15 @@ def send_all(message : types.Message) -> None:
             logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) sent {content_description} to {user_id[0]} via send all command')
             successful_sends += 1
         except telebot.apihelper.ApiException as e:
-            logger.warning(f'Failed to send a message to user with user_id - {user_id[0]}: {e}')
+            if e.error_code == 403 and 'bot was blocked by the user' in e.result.text:
+                cursor.execute("""DELETE FROM subscriptions WHERE user_id = ?""", (user_id[0],))
+                conn.commit()
+                logger.info(f'User with user_id - {user_id[0]} has been removed from the database due to blocking the bot.')
+            else:
+                logger.warning(f'Failed to send a message to user with user_id - {user_id[0]}: {e}')
         total_users += 1
         sleep(1)
+    
     bot_reply_content = content_description if message.content_type != 'text' else f'Сообщение:\n{message.text}'
     bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{bot_reply_content}' if user_language == 'rus'
                 else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{bot_reply_content}')
@@ -483,43 +498,43 @@ def answer_change_language(call : types.CallbackQuery) -> None:
     bot.send_message(chat_id=call.message.chat.id, text='Сейчас выбран русский язык' if call.data == 'rus' else 'Зараз обрана українська мова', reply_markup=keyboard)
     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
-# @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_group'])
-# def change_group(message : types.Message) -> None:
-#     user_language = get_user_language(message.chat.id)
+@bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['change_group'])
+def change_group(message : types.Message) -> None:
+    user_language = get_user_language(message.chat.id)
     
-#     keyboard = types.InlineKeyboardMarkup()
+    keyboard = types.InlineKeyboardMarkup()
     
-#     first_group = types.InlineKeyboardButton(text='ВД02-01', callback_data='1')
-#     second_group = types.InlineKeyboardButton(text='ВД02-02', callback_data='2')
+    first_group = types.InlineKeyboardButton(text='ВД01-14', callback_data='1')
+    second_group = types.InlineKeyboardButton(text='ВД01-15', callback_data='2')
 
-#     keyboard.add(first_group, second_group)
+    keyboard.add(first_group, second_group)
 
-#     bot.send_message(message.chat.id, 'В какой группе по социологии вы находитесь?' if user_language == 'rus' else 'В якій групі по соціології ви знаходитесь?', reply_markup=keyboard)
-#     logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change group')
+    bot.send_message(message.chat.id, 'В какой группе по психологии вы находитесь?' if user_language == 'rus' else 'В якій групі з психологоії ви знаходитесь?', reply_markup=keyboard)
+    logger.info(f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change group')
 
-# @bot.callback_query_handler(func=lambda call: call.data == '1' or call.data == '2')
-# def answer_change_group(call : types.CallbackQuery) -> None:
-#     new_user_group_number = int(call.data)
-#     new_user_group = 'ВД02-01' if new_user_group_number == 1 else 'ВД02-02'
+@bot.callback_query_handler(func=lambda call: call.data == '1' or call.data == '2')
+def answer_change_group(call : types.CallbackQuery) -> None:
+    new_user_group_number = int(call.data)
+    new_user_group = 'ВД01-14' if new_user_group_number == 1 else 'ВД01-15'
 
-#     user_language = get_user_language(call.message.chat.id)
-#     user_group = get_user_group(call.message.chat.id)
+    user_language = get_user_language(call.message.chat.id)
+    user_group = get_user_group(call.message.chat.id)
 
-#     if new_user_group_number == user_group:
-#         bot.answer_callback_query(call.id, 'Эта группа уже выбрана' if user_language == 'rus' else 'Ця група вже обрана')
-#         logger.info(f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) had been already in {new_user_group} group')
-#         return
+    if new_user_group_number == user_group:
+        bot.answer_callback_query(call.id, 'Эта группа уже выбрана' if user_language == 'rus' else 'Ця група вже обрана')
+        logger.info(f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) had been already in {new_user_group} group')
+        return
 
-#     with sqlite3.connect('subscriptions.db') as conn:
-#         cursor = conn.cursor()
-#         cursor.execute("""UPDATE subscriptions SET user_group = ? WHERE user_id == ?""", (new_user_group_number, call.message.chat.id, ))
-#         conn.commit()
+    with sqlite3.connect('subscriptions.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""UPDATE subscriptions SET user_group = ? WHERE user_id == ?""", (new_user_group_number, call.message.chat.id, ))
+        conn.commit()
 
-#     bot.answer_callback_query(call.id, 'Группа изменена' if user_language == 'rus' else 'Групу змінено')
-#     logger.info(f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) changed group to {new_user_group}')
-#     bot.send_message(chat_id=call.message.chat.id, text=f'Сейчас выбрана группа {new_user_group}' if user_language == 'rus' else f'Зараз обрана група {new_user_group}')
+    bot.answer_callback_query(call.id, 'Группа изменена' if user_language == 'rus' else 'Групу змінено')
+    logger.info(f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) changed group to {new_user_group}')
+    bot.send_message(chat_id=call.message.chat.id, text=f'Сейчас выбрана группа {new_user_group}' if user_language == 'rus' else f'Зараз обрана група {new_user_group}')
 
-#     bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
+    bot.edit_message_reply_markup(call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
 def start_bot_polling() -> None:
     RETRY_DELAY_BASE = 2  # Начальная задержка
@@ -555,8 +570,8 @@ if __name__ == '__main__':
     sc.every().wednesday.at('07:00').do(send_schedule)
     sc.every().thursday.at('07:00').do(send_schedule)
     sc.every().friday.at('07:00').do(send_schedule)
-
-    # sc.every().second.do(send_schedule) -- Для тестирования
+    sc.every().saturday.at('07:00').do(send_schedule)
+    # sc.every().second.do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()

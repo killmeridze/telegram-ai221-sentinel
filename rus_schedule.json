@@ -4,154 +4,138 @@
             "week_parity": false,
             "group": null,
             "time": "8:00-9:35",
-            "name": "Конфликтология (Лекция)",
+            "name": "Психология - Лекция",
             "links": [
-                "https://meet.google.com/evc-unoe-grn"
+                "https://meet.google.com/gcv-yxmw-hwe"
             ],
-            "teachers": "Лисенко О.М."
+            "teachers": "Волошенко М.А."
         },
         {
             "week_parity": true,
             "group": null,
             "time": "8:00-9:35",
-            "name": "Конфликтология (Практика)",
+            "name": "Психология - Практика для группы ВД01-14",
             "links": [
-                "https://meet.google.com/xng-yhne-khy"
+                "https://meet.google.com/wvn-smak-kvi"
             ],
-            "teachers": "Семенкова А.Н."
+            "teachers": "Волошенко М.А."
         },
         {
             "week_parity": null,
             "group": null,
             "time": "9:50-11:25",
-            "name": "Программирование систем ІоТ (Лекция)",
+            "name": "Компьютерные сети - Лекция",
             "links": [
-                "https://meet.google.com/jrf-dbjh-gab"
+                "https://us04web.zoom.us/j/9259707912?pwd=rDktkUw9qYd6nSRfiEN2Ws7VFKbVrl.1"
             ],
-            "teachers": "Кондратьев С.Б."
+            "teachers": "Кузнецов Н.А."
         },
         {
-            "week_parity": null,
-            "group": null,
+            "week_parity": true,
             "time": "11:40-13:15",
-            "name": "ВЕБ-технологии и ВЕБ-дизайн (Лекция)",
+            "name": "Технологии создания ПП - Лаб",
             "links": [
-                "https://meet.google.com/wtb-igyr-gsc"
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
             ],
-            "teachers": "Щербина С.К."
+            "teachers": "Блажко А.А. и Дрозд М.А."
         }
     ],
     "tuesday": [
         {
-            "week_parity": null,
-            "group": null,
-            "time": "9:50-11:25",
-            "name": "Объектно-ориентированное программирование (Лекция)",
+            "week_parity": true,
+            "group": 2,
+            "time": "8:00-9:35",
+            "name": "Психология - Практика для группы ВД01-15",
             "links": [
-                "https://bit.ly/hodovychenko_zoom"
+                "https://meet.google.com/zhx-gebj-tpx"
             ],
-            "teachers": "Годовиченко Н.А."
+            "teachers": "Волошенко М.А."
         },
         {
-            "week_parity": null,
-            "group": null,
-            "time": "11:40-13:15",
-            "name": "Современные системы управления базами данных (Лекция)",
+            "time": "9:50-11:25",
+            "name": "Интеллектуальный анализ данных - Лекция",
             "links": [
-                "https://us04web.zoom.us/j/72822539350?pwd=yaDFQzalcdS7SrpPVSaEntk67KBEkm.1",
-                "Пароль: 1237156"
+                "https://teams.microsoft.com/l/team/19%3ASLGsU54KbqRzxjnxzf8KLm1GaBnMIoxOkrYl5q1Zews1%40thread.tacv2/conversations?groupId=bc2625ec-c4de-4c9b-bc6d-620b5f1ee674&tenantId=bd2fa240-71fc-45bd-abce-f1bc80beeb0a"
             ],
-            "teachers": "Иванов А.В."
+            "teachers": "Антощук С.Г."
+        },
+        {
+            "week_parity": true,
+            "time": "11:40-13:15",
+            "name": "Численные методы - Лаб",
+            "links": [
+                "https://teams.microsoft.com/l/meetup-join/19%3ayp3vNP3BqAVPkuW2Y8YqKOKXF0QQlydP0_Y1XiVUDqY1%40thread.tacv2/1724955558997?context=%7b%22Tid%22%3a%22bd2fa240-71fc-45bd-abce-f1bc80beeb0a%22%2c%22Oid%22%3a%226e50c4db-d1c1-4aee-989d-96271729c62c%22%7d"
+            ],
+            "teachers": "Шпинковський А.А. и Дрозд Ю.В."
+        },
+        {
+            "week_parity": true,
+            "time": "13:30-15:05",
+            "name": "Обеспечение качества и контроль качества и тестирование ПП - Лаб",
+            "links": [],
+            "teachers": "Бабич Н.И. и Баськов И.А."
         }
     ],
     "wednesday": [
         {
-            "week_parity": null,
-            "group": null,
             "time": "9:50-11:25",
-            "name": "Технологии компьютерного проектирования (Лаб)",
+            "name": "Інтелектуальний аналіз даних - Лаб",
             "links": [
-                "https://us02web.zoom.us/j/82640793657?pwd=VkhsU1I1K2FCbDQ2SjVGNmQ3U2ZSUT09",
-                "Пароль: 723829"
+                "https://meet.google.com/whs-kgcz-wqj"
             ],
-            "teachers": "Галчонков О.Н. и Бабич Н.И."
+            "teachers": "Кошутина Д.В. и Смык С.Ю."
         },
         {
-            "week_parity": null,
-            "group": null,
             "time": "11:40-13:15",
-            "name": "ВЕБ-технологии и ВЕБ-дизайн (Лаб)",
+            "name": "Численные методы - Лекция",
             "links": [
-                "https://meet.google.com/vfv-djdc-rop"
+                "https://teams.microsoft.com/l/meetup-join/19%3ayp3vNP3BqAVPkuW2Y8YqKOKXF0QQlydP0_Y1XiVUDqY1%40thread.tacv2/1724955558997?context=%7b%22Tid%22%3a%22bd2fa240-71fc-45bd-abce-f1bc80beeb0a%22%2c%22Oid%22%3a%226e50c4db-d1c1-4aee-989d-96271729c62c%22%7d"
             ],
-            "teachers": "Червоненко П.П. и Щербина С.К."
+            "teachers": "Шпинковський А.А."
         }
     ],
     "thursday": [
         {
-            "week_parity": true,
-            "group": null,
-            "time": "8:00-9:35",
-            "name": "Объектно-ориентированное программирование (Практика)",
-            "links": [
-                "https://bit.ly/hodovychenko_zoom"
-            ],
-            "teachers": "Годовиченко Н.А. та Смык С.Ю."
-        },
-        {
             "week_parity": null,
             "group": null,
             "time": "9:50-11:25",
-            "name": "Технологии компьютерного проектирования (Лекція)",
+            "name": "Обеспечение качества и контроль качества и тестирование ПП - Лекция",
             "links": [
                 "https://us02web.zoom.us/j/88210940395?pwd=aGZFRzFpN3NPaVdJa3hXcytEQzd1Zz09",
                 "Пароль: 930067"
             ],
-            "teachers": "Галчонков О.Н."
-        },
-        {
-            "week_parity": false,
-            "group": null,
-            "time": "11:40-13:15",
-            "name": "Философия (Лаб)",
-            "links": [
-                "https://teams.microsoft.com/l/meetup-join/19%3ajiFks_t_8ouB7_bgANdHu_Q4UHG41OL2kFIMdqlQJg41%40thread.tacv2/1708806087427?"
-            ],
-            "teachers": "Янушевич И.А."
+            "teachers": "Баськов И.А."
         }
     ],
     "friday": [
         {
-            "week_parity": false,
-            "group": null,
-            "time": "9:50-11:25",
-            "name": "Программирование систем ІоТ (Лаб)",
-            "links": [
-                "https://meet.google.com/jrf-dbjh-gab"
-            ],
-            "teachers": "Ядрова М.В. и Кондратьев С.Б."
+            "time": "8:00-9:35",
+            "name": "Компьютерные сети - Лаб",
+            "links": [],
+            "teachers": "Кузнецов Н.А."
         },
         {
             "week_parity": true,
             "group": null,
             "time": "9:50-11:25",
-            "name": "Современные системы управления базами данных (Лаб)",
+            "name": "Технологии создания ПП - Лекция",
             "links": [
-                "https://us04web.zoom.us/j/8177791667?pwd=Z1NuQzZjdVRDOStHNVdrNmwvNllLdz09&omn=77021159346"
+                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09",
+                "Пароль: 306089"
             ],
-            "teachers": "Дрозд М.А. и Глава М.Г."
+            "teachers": "Блажко А.А."
         },
         {
-            "week_parity": null,
-            "group": null,
             "time": "11:40-13:15",
-            "name": "Философия (Лекция)",
-            "links": [
-                "https://teams.microsoft.com/l/meetup-join/19%3ajiFks_t_8ouB7_bgANdHu_Q4UHG41OL2kFIMdqlQJg41%40thread.tacv2/1708806087427?"
-            ],
-            "teachers": "Янушевич И.А."
+            "name": "Веб-технологии и Веб-дизайн - Лекция",
+            "links": [],
+            "teachers": "Червоненко П.П."
         }
     ],
-    "saturday": [],
+    "saturday": [
+        {
+            "schedule-day": 0
+        }
+    ],
     "sunday": []
 }
