@@ -17,6 +17,7 @@ import os
 import datetime
 import re
 
+
 logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}',
            level='DEBUG', rotation='10 MB', compression='zip')
 
@@ -26,6 +27,8 @@ TOKEN = os.getenv('TOKEN')
 ADMINS = [int(admin) for admin in os.getenv('ADMINS').split(',')]
 with open('button_texts.json', 'r', encoding='utf-8') as file:
     BUTTON_TEXTS = json.load(file)
+
+telebot.apihelper.SESSION_TIME_TO_LIVE = 5 * 60
 
 bot = telebot.TeleBot(TOKEN)
 
