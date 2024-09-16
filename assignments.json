@@ -1,11 +1,6 @@
 {
     "assignments": [
         {
-            "subject": "Some hueta predmet",
-            "task": "aaaa ya dolbaeb",
-            "deadline": "2024-09-15"
-        },
-        {
             "subject": "Some hueta predmet 2",
             "task": "aaaa ya ne dolbaeb",
             "deadline": "2024-09-20"
@@ -14,11 +9,6 @@
             "subject": "Пенис",
             "task": "Пенис",
             "deadline": "2025-02-28"
-        },
-        {
-            "subject": "Я хуесос",
-            "task": "Нет не хуесос",
-            "deadline": "2024-09-15"
         },
         {
             "subject": "Я пидорас",

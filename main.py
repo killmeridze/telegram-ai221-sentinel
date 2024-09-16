@@ -48,31 +48,26 @@ VOICE_FILE_CONTENT = load_voice_file('voice.m4a')
 
 
 def schedule_text(today: datetime.date, language: str, group: int, chat_id: int) -> str:
-    '''Функция для составления сообщения с расписанием'''
+    '''Функция для составления сообщения с расписанием ДАДЕЛАЙ СУКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
 
     day_name_en = today.strftime('%A').lower()
-    day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
-    day_name_uk = settings.weekday_name_uk_dict.get(day_name_en, day_name_en)
+    # day_name_ru = settings.weekday_name_ru_dict.get(day_name_en, day_name_en)
+    # day_name_uk = settings.weekday_name_uk_dict.get(day_name_en, day_name_en)
+    day_name_local = settings.weekday_name_dict[language].get(
+        day_name_en, day_name_en)
 
     schedule_file = f'{language}_schedule.json'
 
     with open(schedule_file, 'r', encoding='utf-8') as file:
         schedule = json.load(file).get(day_name_en)
 
-    if language == 'rus':
-        if not schedule:
-            if VOICE_FILE_CONTENT:
-                bot.send_voice(chat_id, VOICE_FILE_CONTENT)
-            return ''
+    if not schedule:
+        if VOICE_FILE_CONTENT:
+            bot.send_voice(chat_id, VOICE_FILE_CONTENT)
+        return ''
 
-        message_text = f'Расписание на {day_name_ru}:\n\n'
-    else:
-        if not schedule:
-            if VOICE_FILE_CONTENT:
-                bot.send_voice(chat_id, VOICE_FILE_CONTENT)
-            return ''
-
-        message_text = f'Розклад на {day_name_uk}:\n\n'
+    message_text = BUTTON_TEXTS[language]["schedule_for_day"].format(
+        day_name=day_name_local)
 
     if day_name_en != 'saturday':
         # Проверка на чётность/нечётность. False - нечётная, True - чётная
@@ -95,8 +90,8 @@ def schedule_text(today: datetime.date, language: str, group: int, chat_id: int)
                 if 'Пароль' in link:
                     message_text += f'{link}\n'
                 else:
-                    link_shortcut = 'Ссылка на ' if language == 'rus' else 'Посилання на '
-                    link_shortcut += get_platform(link)
+                    link_shortcut = BUTTON_TEXTS[language]["link_to"] + \
+                        get_platform(link)
                     message_text += f'[{link_shortcut}]({link})\n'
             message_text += f'{item["teachers"]}\n\n'
 
@@ -231,7 +226,7 @@ def get_subcribe_unsubscibe_quote_button(language: str, user_id: int) -> types.K
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['settings'])
 def show_settings(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
-    prompt_text = 'Выберите действие:' if user_language == 'rus' else 'Оберіть дію:'
+    prompt_text = BUTTON_TEXTS[user_language]["choose_action"]
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(
         user_language, message.chat.id, mode='settings'))
 
@@ -246,7 +241,7 @@ def return_to_main(message: types.Message) -> None:
             """SELECT is_admin FROM subscriptions WHERE user_id == ?""", (message.chat.id, ))
         is_admin = cursor.fetchone()[0]
 
-    prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
+    prompt_text = BUTTON_TEXTS[user_language]["what_next"]
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(
         user_language, message.chat.id, is_admin, mode='main'))
 
@@ -254,7 +249,7 @@ def return_to_main(message: types.Message) -> None:
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["return_to_settings"])
 def return_to_settings(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
-    prompt_text = 'Что делать дальше? Выбор за тобой, сливка' if user_language == 'rus' else 'Що робити далi? Вибiр за тобою, слiвка'
+    prompt_text = BUTTON_TEXTS[user_language]["return_to_settings_prompt"]
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(
         user_language, message.chat.id, mode='settings'))
 
@@ -262,7 +257,7 @@ def return_to_settings(message: types.Message) -> None:
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]["configure_quote"])
 def handle_configure_quote(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
-    prompt_text = 'Выберите опцию:' if user_language == 'rus' else 'Виберіть опцію:'
+    prompt_text = BUTTON_TEXTS[user_language]["configure_quote_prompt"]
     bot.send_message(message.chat.id, prompt_text, reply_markup=update_buttons(
         user_language, message.chat.id, mode='quotes'))
 
@@ -368,12 +363,12 @@ def subscribe_unsubscribe_handler(message: types.Message) -> None:
             update_query = """INSERT INTO subscriptions (user_id, subscribed) VALUES (?, 1)"""
         else:
             update_query = """UPDATE subscriptions SET subscribed = 1 WHERE user_id == ?"""
-        success_message = 'Вы успешно подписались на рассылку!' if user_language == 'rus' else 'Ви успішно підписалися на розсилку!'
+        success_message = BUTTON_TEXTS[user_language]["subscribe_success"]
         logger.info(
             f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed")
     else:
         update_query = """UPDATE subscriptions SET subscribed = 0 WHERE user_id == ?"""
-        success_message = 'Вы успешно отписались от рассылки!' if user_language == 'rus' else 'Ви успішно відписалися від розсилки!'
+        success_message = BUTTON_TEXTS[user_language]["unsubscribe_success"]
         logger.info(
             f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed")
 
@@ -401,12 +396,12 @@ def handle_quotes_subscription(message: types.Message) -> None:
         f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to subscribe/unsubscribe to/from quotes')
     if fetched is None or not fetched[0]:
         update_query = """UPDATE subscriptions SET quotes_subscribed = 1 WHERE user_id == ?"""
-        success_message = 'Вы успешно подписались на цитаты!' if user_language == 'rus' else 'Ви успішно підписалися на цитати!'
+        success_message = BUTTON_TEXTS[user_language]["subscribe_quotes_success"]
         logger.info(
             f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully subscribed to quotes")
     else:
         update_query = """UPDATE subscriptions SET quotes_subscribed = 0 WHERE user_id == ?"""
-        success_message = 'Вы успешно отписались от цитат!' if user_language == 'rus' else 'Ви успішно відписалися від цитат!'
+        success_message = BUTTON_TEXTS[user_language]["unsubscribe_quotes_success"]
         logger.info(
             f"User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has successfully unsubscribed from quotes")
 
@@ -446,14 +441,12 @@ def get_text_to_send_all(message: types.Message) -> None:
     logger.info(
         f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to send all')
     if not user_is_admin:
-        bot.reply_to(message, 'У вас нет прав на это' if user_language ==
-                     'rus' else 'У вас нема прав для цього')
+        bot.reply_to(message, BUTTON_TEXTS[user_language]["no_rights_error"])
         logger.info(
             f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) has no rights to send all')
         return
 
-    msg = bot.reply_to(message, 'Что вы хотите отправить всем?' if user_language ==
-                       'rus' else 'Що ви хочете відправити усім?')
+    msg = bot.reply_to(message, BUTTON_TEXTS[user_language]["send_all_prompt"])
 
     bot.register_next_step_handler(msg, send_all)
 
@@ -507,16 +500,20 @@ def send_all(message: types.Message) -> None:
         sleep(1)
 
     bot_reply_content = content_description if message.content_type != 'text' else f'Сообщение:\n{message.text}'
-    bot.reply_to(message, f'Сообщение отправлено {successful_sends} из {total_users} пользователей:\n{bot_reply_content}' if user_language == 'rus'
-                 else f'Повідомлення відправлене {successful_sends} з {total_users} користувачів:\n{bot_reply_content}')
+    success_message = BUTTON_TEXTS[user_language]["send_all_success"].format(
+        successful_sends=successful_sends,
+        total_users=total_users,
+        bot_reply_content=bot_reply_content
+    )
+    bot.reply_to(message, success_message)
 
 
 @bot.message_handler(func=lambda message: message.text == BUTTON_TEXTS[get_user_language(message.chat.id)]['find_sticker'])
 def get_text_to_find_stickers(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
-    msg = bot.reply_to(message, 'Введите текст для поиска стикеров' if user_language ==
-                       'rus' else 'Введіть текст для пошуку стикерів')
+    msg = bot.reply_to(
+        message, BUTTON_TEXTS[user_language]["enter_sticker_search"])
     logger.info(
         f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to find sticker')
 
@@ -550,8 +547,7 @@ def find_stickers(message: types.Message) -> None:
         logger.info(
             f'Sent {len(result)} stickers to user {message.from_user.username}(user_id - {message.from_user.id}). Searching text was {message.text}')
     else:
-        bot.reply_to(message, 'Нет стикеров с таким текстом' if user_language ==
-                     'rus' else 'Нема стикерів з таким текстом')
+        bot.reply_to(message, BUTTON_TEXTS[user_language]["no_stickers_found"])
         logger.info(
             f'User {message.from_user.username}(user_id - {message.from_user.id}) did not find any sticker. Searching text was {message.text}')
 
@@ -560,8 +556,8 @@ def find_stickers(message: types.Message) -> None:
 def get_quote_tag_from_user(message: types.Message) -> None:
     user_language = get_user_language(message.chat.id)
 
-    msg = bot.reply_to(message, ('Введите тему цитаты из списка ниже:\n' if user_language ==
-                       'rus' else 'Введіть тему цитати зі списку нижче:\n') + quote_tags_by_letters())
+    msg = bot.reply_to(message, BUTTON_TEXTS[user_language]
+                       ["enter_quote_theme_prompt"] + quote_tags_by_letters())
     logger.info(
         f'User {message.from_user.username}(user_id - {message.from_user.id}) tried to change quote tag')
 
@@ -573,8 +569,7 @@ def proccess_tag(message: types.Message) -> None:
     tag = message.text
 
     if tag not in settings.quote_tags:
-        bot.reply_to(message, 'Такой темы нет в списке' if user_language ==
-                     'rus' else 'Такої теми немає у списку')
+        bot.reply_to(message, BUTTON_TEXTS[user_language]["no_quote_theme"])
         logger.info(
             f'User {message.from_user.username}(user_id - {message.from_user.id}) entered wrong tag - {tag}')
         return
@@ -585,8 +580,7 @@ def proccess_tag(message: types.Message) -> None:
             """UPDATE subscriptions SET quote_tag = ? WHERE user_id = ?""", (tag, message.chat.id, ))
         conn.commit()
 
-    bot.reply_to(message, 'Тема цитат изменена' if user_language ==
-                 'rus' else 'Тему цитат змінено')
+    bot.reply_to(message, BUTTON_TEXTS[user_language]["quote_theme_changed"])
     logger.info(
         f'User {message.from_user.username}(user_id - {message.from_user.id}) changed quote tag to {tag}')
 
@@ -603,8 +597,8 @@ def change_language(message: types.Message) -> None:
 
     keyboard.add(rus_lang, ukr_lang)
 
-    bot.send_message(message.chat.id, 'На какой язык поменять?' if user_language ==
-                     'rus' else 'На яку мову змінити?', reply_markup=keyboard)
+    bot.send_message(
+        message.chat.id, BUTTON_TEXTS[user_language]["language_change_prompt"], reply_markup=keyboard)
     logger.info(
         f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change language')
 
@@ -616,7 +610,7 @@ def answer_change_language(call: types.CallbackQuery) -> None:
 
     if user_language == call.data:
         bot.answer_callback_query(
-            call.id, 'Этот язык уже выбран' if user_language == 'rus' else 'Ця мова вже обрана')
+            call.id, BUTTON_TEXTS[user_language]["language_already_selected"])
         logger.info(
             f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) already has {full_language_name} language')
         return
@@ -633,15 +627,15 @@ def answer_change_language(call: types.CallbackQuery) -> None:
         is_admin = cursor.fetchone()[0]
 
     bot.answer_callback_query(
-        call.id, 'Язык изменён' if call.data == 'rus' else 'Мову змінено')
+        call.id, BUTTON_TEXTS[call.data]["language_changed"])
 
     keyboard = update_buttons(call.data, is_admin, 'settings')
 
     logger.info(
         f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) changed language to {full_language_name}')
 
-    bot.send_message(chat_id=call.message.chat.id, text='Сейчас выбран русский язык' if call.data ==
-                     'rus' else 'Зараз обрана українська мова', reply_markup=keyboard)
+    bot.send_message(chat_id=call.message.chat.id,
+                     text=BUTTON_TEXTS[call.data]["language_selected"], reply_markup=keyboard)
     bot.edit_message_reply_markup(
         call.message.chat.id, message_id=call.message.message_id, reply_markup='')
 
@@ -658,8 +652,8 @@ def change_group(message: types.Message) -> None:
 
     keyboard.add(first_group, second_group)
 
-    bot.send_message(message.chat.id, 'В какой группе по психологии вы находитесь?' if user_language ==
-                     'rus' else 'В якій групі з психологоії ви знаходитесь?', reply_markup=keyboard)
+    bot.send_message(
+        message.chat.id, BUTTON_TEXTS[user_language]["group_change_prompt"], reply_markup=keyboard)
     logger.info(
         f'User {message.from_user.username} ({message.from_user.first_name})(user_id - {message.from_user.id}) tried to change group')
 
@@ -674,7 +668,7 @@ def answer_change_group(call: types.CallbackQuery) -> None:
 
     if new_user_group_number == user_group:
         bot.answer_callback_query(
-            call.id, 'Эта группа уже выбрана' if user_language == 'rus' else 'Ця група вже обрана')
+            call.id, BUTTON_TEXTS[user_language]["group_already_selected"])
         logger.info(
             f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) had been already in {new_user_group} group')
         return
@@ -686,11 +680,11 @@ def answer_change_group(call: types.CallbackQuery) -> None:
         conn.commit()
 
     bot.answer_callback_query(
-        call.id, 'Группа изменена' if user_language == 'rus' else 'Групу змінено')
+        call.id, BUTTON_TEXTS[user_language]["group_changed"])
     logger.info(
         f'User {call.message.chat.username} ({call.from_user.first_name})(user_id - {call.message.chat.id}) changed group to {new_user_group}')
     bot.send_message(chat_id=call.message.chat.id,
-                     text=f'Сейчас выбрана группа {new_user_group}' if user_language == 'rus' else f'Зараз обрана група {new_user_group}')
+                     text=BUTTON_TEXTS[user_language]["current_group"].format(group_name=new_user_group))
 
     bot.edit_message_reply_markup(
         call.message.chat.id, message_id=call.message.message_id, reply_markup='')
@@ -802,7 +796,7 @@ def process_deadline(message, subject, task, language):
         today = datetime.date.today()
 
         if deadline < today:
-            raise ValueError("Дедлайн не может быть в прошлом")
+            raise ValueError("deadline_in_past")
 
         assignments = load_assignments()
         assignments['assignments'].append(
@@ -812,13 +806,13 @@ def process_deadline(message, subject, task, language):
             message.chat.id, BUTTON_TEXTS[language]["assignment_added_successfully"])
 
     except ValueError as e:
-        if str(e) == "Дедлайн не может быть в прошлом":
+        error_code = str(e)
+        if error_code == "deadline_in_past":
             msg = bot.send_message(
-                message.chat.id, BUTTON_TEXTS[language]["assignment_deadline_in_past_error"])
+                message.chat.id, BUTTON_TEXTS[language]["deadline_in_past_error"])
         else:
             msg = bot.send_message(
-                message.chat.id, BUTTON_TEXTS[language]["assignment_deadline_format_error"])
-
+                message.chat.id, BUTTON_TEXTS[language]["deadline_format_error"])
         bot.register_next_step_handler(
             msg, process_deadline, subject, task, language)
 
