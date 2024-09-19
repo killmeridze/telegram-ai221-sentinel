@@ -27,6 +27,15 @@
             ],
             "teachers": "Кузнєцов М.О."
         },
+	{
+            "week_parity": false,
+            "time": "11:40-11:25",
+            "name": "Веб-технологии и Веб-дизайн - Лаб",
+            "links": [
+                "https://meet.google.com/rqx-erms-vqr"
+            ],
+            "teachers": "Червоненко П.П. и Денисенко А.В."
+        },
         {
             "week_parity": true,
             "time": "11:40-13:15",
@@ -52,7 +61,7 @@
             "time": "9:50-11:25",
             "name": "Інтелектуальний аналіз даних - Лекція",
             "links": [
-                "https://teams.microsoft.com/l/team/19%3ASLGsU54KbqRzxjnxzf8KLm1GaBnMIoxOkrYl5q1Zews1%40thread.tacv2/conversations?groupId=bc2625ec-c4de-4c9b-bc6d-620b5f1ee674&tenantId=bd2fa240-71fc-45bd-abce-f1bc80beeb0a"
+                "https://zoom.us/j/4418578349?pwd=M1MxUWR3MGVqRHAvUDkxS2E5ODhYZz09"
             ],
             "teachers": "Антощук С.Г."
         },
@@ -69,7 +78,9 @@
             "week_parity": true,
             "time": "13:30-15:05",
             "name": "Забезпечення якості та контроль якості і тестування ПП - Лаб",
-            "links": [],
+            "links": [
+		"https://us04web.zoom.us/j/2872972964?pwd=NVBhNmVVN2lNQlpqWmxHNWhOeXBFUT09"
+	    ],
             "teachers": "Бабич М.І. та Баськов І.О."
         }
     ],
@@ -96,7 +107,7 @@
             "time": "9:50-11:25",
             "name": "Забезпечення якості та контроль якості і тестування ПП - Лекція",
             "links": [
-                "https://us02web.zoom.us/j/87647753497?pwd=eTJzOGo5bGZnNC9NMGRBVFNKRVlQUT09"
+                "https://us04web.zoom.us/j/2872972964?pwd=NVBhNmVVN2lNQlpqWmxHNWhOeXBFUT09"
             ],
             "teachers": "Баськов І.О."
         }
@@ -105,8 +116,10 @@
         {
             "time": "8:00-9:35",
             "name": "Комп'ютерні мережі - Лаб",
-            "links": [],
-            "teachers": "Кузнєцов М.О."
+            "links": [
+		"https://us04web.zoom.us/j/9259707912?pwd=rDktkUw9qYd6nSRfiEN2Ws7VFKbVrl.1"
+	    ],
+            "teachers": "Кузнєцов М.О. та Засідько А.Я."
         },
         {
             "time": "9:50-11:25",
@@ -120,7 +133,9 @@
         {
             "time": "11:40-13:15",
             "name": "Веб-технології та Веб-дизайн - Лекція",
-            "links": [],
+            "links": [
+		"https://meet.google.com/ozn-fgoe-xdf"
+	    ],
             "teachers": "Червоненко П.П."
         }
     ],

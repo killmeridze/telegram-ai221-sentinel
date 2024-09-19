@@ -4,7 +4,7 @@ import settings
 
 logger.add('logging.log', format='{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}', level='DEBUG', rotation='10 MB', compression='zip')
 
-quotes_api_url = "https://api.quotable.io"
+quotes_api_url = "http://api.quotable.io"
 translation_api_url = "https://api.mymemory.translated.net"
 
 def get_random_quote(tag: str, lang: str) -> str | None:

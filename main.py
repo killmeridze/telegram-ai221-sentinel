@@ -584,13 +584,13 @@ def schedule_checker() -> None:
         sleep(1)
 
 if __name__ == '__main__':
-    # sc.every().monday.at('07:00').do(send_schedule)
-    # sc.every().tuesday.at('07:00').do(send_schedule)
-    # sc.every().wednesday.at('07:00').do(send_schedule)
-    # sc.every().thursday.at('07:00').do(send_schedule)
-    # sc.every().friday.at('07:00').do(send_schedule)
-    # sc.every().saturday.at('07:00').do(send_schedule)
-    # sc.every().second.do(send_schedule)
+    sc.every().monday.at('07:00').do(send_schedule)
+    sc.every().tuesday.at('07:00').do(send_schedule)
+    sc.every().wednesday.at('07:00').do(send_schedule)
+    sc.every().thursday.at('07:00').do(send_schedule)
+    sc.every().friday.at('07:00').do(send_schedule)
+   #  sc.every().saturday.at('07:00').do(send_schedule)
+   #  sc.every().second.do(send_schedule)
 
     thread = Thread(target=schedule_checker, daemon=True)
     thread.start()
